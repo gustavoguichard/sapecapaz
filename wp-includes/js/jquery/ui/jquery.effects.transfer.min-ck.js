@@ -1,0 +1,4 @@
+/*! jQuery UI - v1.8.20 - 2012-04-30
+* https://github.com/jquery/jquery-ui
+* Includes: jquery.effects.transfer.js
+* Copyright (c) 2012 AUTHORS.txt; Licensed MIT, GPL */(function(e,t){e.effects.transfer=function(t){return this.queue(function(){var n=e(this),r=e(t.options.to),i=r.offset(),s={top:i.top,left:i.left,height:r.innerHeight(),width:r.innerWidth()},o=n.offset(),u=e('<div class="ui-effects-transfer"></div>').appendTo(document.body).addClass(t.options.className).css({top:o.top,left:o.left,height:n.innerHeight(),width:n.innerWidth(),position:"absolute"}).animate(s,t.duration,t.options.easing,function(){u.remove(),t.callback&&t.callback.apply(n[0],arguments),n.dequeue()})})}})(jQuery);

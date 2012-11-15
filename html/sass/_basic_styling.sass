@@ -1,0 +1,111 @@
++css-techniques(14)
+
+@font-face
+  font-family: 'the_great_escape'
+  src: url('../fonts/thegreatescape-webfont.eot')
+  src: url('../fonts/thegreatescape-webfont.eot?#iefix') format('embedded-opentype')
+  src: url('../fonts/thegreatescape-webfont.woff') format('woff')
+  src: url('../fonts/thegreatescape-webfont.ttf') format('truetype')
+  // src: url('../fonts/thegreatescape-webfont.svg#the_great_escape') format('svg')
+  font-weight: normal
+  font-style: normal
+
+html
+  line-height: $base-margin
+  height: 100%
+  +selection(false)
+    background: lighten($green, 10%)
+    color: $grey
+    text-shadow: 1px 1px 0 white
+
+body
+  font-family: 'Open Sans', sans-serif
+  color: $grey
+  min-height: 100%
+  min-width: $iphone-landscape
+  position: relative
+
+input, textarea
+  font-family: 'Open Sans', sans-serif
+
+a
+  color: darken($blue, 10%)
+  text-decoration: none
+
+  +context(".reflexao")
+    color: $green
+  +context(".brincadeira")
+    color: $red
+  +context(".comunicacao")
+    color: $blue
+
+  &:hover
+    text-decoration: underline
+
+
+p, hr, ol, ul, h1, h2, h3, h4, h5, h6
+  padding-bottom: $base-margin
+  line-height: $base-margin
+
+h1, h2, h3, h4, h5
+  font-weight: 700
+
+  a:hover
+    text-decoration: none
+
+h1
+  font-size: relative-size(21,14)
+
+h2
+  font-size: relative-size(18,14)
+
+h3
+  font-size: relative-size(16,14)
+
+h4
+  font-size: relative-size(15,14)
+
+strong, b
+  font-weight: 700
+
+em, i
+  font-style: italic
+
+blockquote
+  font-size: relative-size(16,14)
+  p
+    line-height: relative-size(26,14)
+
+ol
+  list-style: decimal inside
+
+ul
+  list-style: none
+
+img
+  border: 2px solid $grey
+  +context("#banner")
+    border: none
+  +context(a)
+    border: 2px solid $grey
+  +context(".post")
+    margin-bottom: $base-margin
+
+  +context(".reflexao")
+    border-color: $green
+  +context(".brincadeira")
+    border-color: $red
+  +context(".comunicacao")
+    border-color: $blue
+
+  &.right, &.alignright
+    float: right
+    margin: 0 0 5px 5px
+
+  &.left, &.alignleft
+    float: left
+    margin: 0 5px 5px 0
+
+  &.center, &.aligncenter
+    display: block
+    margin: 0 auto $base-margin

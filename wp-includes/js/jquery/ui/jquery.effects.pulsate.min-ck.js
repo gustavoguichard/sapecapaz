@@ -1,0 +1,4 @@
+/*! jQuery UI - v1.8.20 - 2012-04-30
+* https://github.com/jquery/jquery-ui
+* Includes: jquery.effects.pulsate.js
+* Copyright (c) 2012 AUTHORS.txt; Licensed MIT, GPL */(function(e,t){e.effects.pulsate=function(t){return this.queue(function(){var n=e(this),r=e.effects.setMode(n,t.options.mode||"show"),i=(t.options.times||5)*2-1,s=t.duration?t.duration/2:e.fx.speeds._default/2,o=n.is(":visible"),u=0;o||(n.css("opacity",0).show(),u=1),(r=="hide"&&o||r=="show"&&!o)&&i--;for(var f=0;f<i;f++)n.animate({opacity:u},s,t.options.easing),u=(u+1)%2;n.animate({opacity:u},s,t.options.easing,function(){u==0&&n.hide(),t.callback&&t.callback.apply(this,arguments)}),n.queue("fx",function(){n.dequeue()}).dequeue()})}})(jQuery);

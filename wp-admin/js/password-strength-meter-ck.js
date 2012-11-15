@@ -1,0 +1,1 @@
+function passwordStrength(e,t,n){var r=1,i=2,s=3,o=4,u=5,a=0,f,l;if(e!=n&&n.length>0)return u;if(e.length<4)return r;if(e.toLowerCase()==t.toLowerCase())return i;e.match(/[0-9]/)&&(a+=10);e.match(/[a-z]/)&&(a+=26);e.match(/[A-Z]/)&&(a+=26);e.match(/[^a-zA-Z0-9]/)&&(a+=31);f=Math.log(Math.pow(a,e.length));l=f/Math.LN2;return l<40?i:l<56?s:o};

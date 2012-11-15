@@ -1,0 +1,4 @@
+/*! jQuery UI - v1.8.20 - 2012-04-30
+* https://github.com/jquery/jquery-ui
+* Includes: jquery.effects.blind.js
+* Copyright (c) 2012 AUTHORS.txt; Licensed MIT, GPL */(function(e,t){e.effects.blind=function(t){return this.queue(function(){var n=e(this),r=["position","top","bottom","left","right"],i=e.effects.setMode(n,t.options.mode||"hide"),s=t.options.direction||"vertical";e.effects.save(n,r),n.show();var o=e.effects.createWrapper(n).css({overflow:"hidden"}),u=s=="vertical"?"height":"width",f=s=="vertical"?o.height():o.width();i=="show"&&o.css(u,0);var l={};l[u]=i=="show"?f:0,o.animate(l,t.duration,t.options.easing,function(){i=="hide"&&n.hide(),e.effects.restore(n,r),e.effects.removeWrapper(n),t.callback&&t.callback.apply(n[0],arguments),n.dequeue()})})}})(jQuery);

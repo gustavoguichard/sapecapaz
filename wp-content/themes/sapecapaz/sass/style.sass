@@ -1,0 +1,326 @@
+@import base
+@import basic_styling
+@import homepage
+
+= button($color: $green)
+  $dark-color: darken($color, 30%)
+  border: 2px solid $grey
+  background: $color
+  color: $grey
+  padding: 6px 12px
+  font-size: 1.4em
+  cursor: pointer
+  text-shadow: 0 -1px rgba(white, .3)
+  +border-radius(3px)
+  +box-shadow(0 5px 1px $dark-color, 0 1px 1px $dark-color)
+
+  &:active
+    +box-shadow(0 1px 0 $dark-color, 0 1px $dark-color inset)
+    +move(4px, bottom)
+
+#search-box
+  position: absolute
+  right: 20px
+  top: 0
+  z-index: 100
+  width: 30%
+
+  input[type=text]
+    padding: 4px
+    margin: 0
+
+#search-container
+  background: $green
+  +border-radius(0 0 3px 3px)
+  padding: 5px
+  display: none
+
+  &:target
+    display: block
+
+#toggle-search
+  position: absolute
+  right: 10px
+  bottom: -30px
+  +sprite-replace("search")
+  background-color: $green
+  +border-radius(0 0 3px 3px)
+
+  &:hover, &:active
+    +sprites-sprite-position("search-hover")
+
+#header, #poem, #banner .banner_call_out, blockquote
+  font-family: 'the_great_escape', cursive
+
+header.header
+  background: $aqua url("../images/header_bg.png") repeat-x bottom center
+  +context(".home")
+    background: white url("../images/header_bg_home.png") repeat-x bottom center
+
+  +decorative-content(before)
+    +image-replace("top_colors.png")
+    background-repeat: repeat
+    background-size: cover
+    width: 100%
+    top: 0
+
+#header, #main, #banner .banner_content
+  @extend .row
+
+#header
+  padding-bottom: 70px
+
+#logo
+  margin-top: 50px
+  +move(10px, right)
+  +sprite-replace("logo")
+  +apply-to(less-than, ipad-landscape)
+    position: static
+    margin: 50px auto 0
+
+#top_menu
+  +horizontal-list
+  float: right
+  margin-top: -27px
+  +apply-to(less-than, ipad-landscape)
+    float: none
+    margin: 30px auto 0
+
+  .menu-item
+    margin-left: 5px
+
+    a
+      color: $grey
+      display: block
+      text-decoration: none
+      font-size: relative-size(15,14)
+      padding: 2px 8px 1px
+      border: 2px solid transparent
+      +transition(all .3s)
+      +border-radius(20px 50px 50px 30px)
+
+      &:hover, &:active
+        background-color: white
+        border-color: darken($yellow, 3%)
+        color: darken($yellow, 30%)
+        +box-shadow(0 1px 4px rgba(black, .2))
+        text-shadow: 0 1px 0 white
+        +transform(scale(1.1) rotate(1deg))
+
+    &:nth-child(5n + 5) a
+      +border-radius(40px 20px 50px 20px)
+      &:hover, &:active
+        border-color: $blue
+        color: darken($blue, 20%)
+        +transform(scale(1.1) rotate(1deg))
+    &:nth-child(5n + 4) a
+      +border-radius(50%)
+      &:hover, &:active
+        border-color: $red
+        color: darken($red, 20%)
+        +transform(scale(1.1) rotate(-2deg))
+    &:nth-child(5n + 3) a
+      // +border-radius(20px 20px 10px 10px)
+      &:hover, &:active
+        border-color: $grey
+        color: darken($grey, 20%)
+        +transform(scale(1.1) rotate(2deg))
+    &:nth-child(5n + 2) a
+      +border-radius(10px)
+      &:hover, &:active
+        border-color: $green
+        color: darken($green, 20%)
+        +transform(scale(1.1) rotate(-2deg))
+
+    &.active a, &.current-menu-item a
+      font-weight: bold
+
+hr
+  clear: left
+  +sprite-replace("row")
+  margin: $base-margin auto
+  border: none
+
+  &:nth-child(even), .post:nth-child(even) > &, .hentry:nth-child(even) > &
+    +sprites-sprite-position("row2")
+
+  &:nth-child(odd), .post:nth-child(odd) > &, .hentry:nth-child(odd) > &
+    +sprites-sprite-position("row")
+
+#main
+  padding-top: 4 * $base-margin
+  padding-bottom: 13 * $base-margin
+  +context(".page-template-contato-page-php")
+    padding-bottom: 8 * $base-margin
+  overflow: hidden
+  +apply-to(less-than, iphone-landscape)
+    padding-bottom: 7 * $base-margin
+
+  ul li
+    background: image_url("small_star.png") no-repeat 0 5px
+    padding-left: 16px
+    margin-bottom: $base-margin/2
+
+.post, .pagination, .page-title, .hentry, .service_item
+  +column(10)
+  +offsetBy(1)
+  margin-bottom: $base-margin
+
+.video_item, .album_item
+  +column(6)
+  +apply-to(less-than, ipad-portrait)
+    clear: left
+    width: 95%
+
+.album_item
+  .entry-title
+    max-height: relative-size(40, 14)
+    text-align: center
+
+.service_item, .page_item
+  img
+    @extend img.alignleft
+
+.gallery
+  .button
+    float: left
+    clear: both
+    margin: 0 0 $base-margin 14px
+    font-size: 1em
+    padding: 5px 10px
+
+.gallery-item
+  +column(4)
+  +apply-to(less-than, ipad-portrait)
+    clear: left
+    text-align: center
+    margin-left: auto
+    margin-right: auto
+    width: 100%
+
+.category-show
+  font-size: relative-size(11,14)
+  text-transform: uppercase
+  display: block
+  margin: -24px 0 14px
+  +context(footer)
+    text-align: center
+    margin: 0
+
+input[type=text], input[type=email], textarea
+  color: $grey
+  width: 100%
+  display: block
+  outline: none
+  padding: 10px
+  font-size: relative-size(16,14)
+  border: 2px solid $grey
+  margin-bottom: $base-margin
+  +context(".error")
+    border-color: darken($red, 10%)
+
+input[type=submit], button, a.button
+  +button
+  float: right
+  text-decoration: none
+
+#contact-section
+  width: 85%
+  margin: 0 auto
+
+  form
+    +decorative-content
+      +image-replace("contact_bg.png")
+      bottom: -150px
+      left: -150px
+      z-index: -1
+
+#prev_post, #next_post
+  +button
+  padding: 8px 15px
+  a
+    +sprite-replace("seta-right")
+
+#prev_post
+  float: left
+  a
+    +sprites-sprite-position("seta-left")
+
+#next_post
+  float: right
+
+#footer
+  width: 100%
+  background: $aqua
+  +decorative-content(before)
+    position: absolute
+    display: block
+    background: image_url("footer.png") repeat-x center top
+    top: -118px
+    width: 100%
+    height: image-height("footer.png")
+  +apply-to(less-than, iphone-landscape)
+    margin-top: 7 * $base-margin
+
+  footer
+    padding: 15px 0
+    @extend .row
+    +decorative-content
+      +sprite-replace("bird")
+      top: -118px
+      +absolute-centering(30px, right, 320)
+      +hide-below(ipad-portrait)
+      +context(".page-template-contato-page-php")
+        display: none
+
+#bottom_menu
+  +column(12)
+  +horizontal-list
+  font-size: relative-size(13,14)
+  z-index: 10
+
+  li
+    margin-right: 1em
+    +apply-to(less-than, iphone-landscape)
+      display: block
+      float: none
+      text-align: center
+      font-size: relative-size(16,13)
+      padding-bottom: 5px
+
+    &.active a, &.current-menu-item a
+      font-weight: bold
+      text-decoration: none
+
+  a
+    color: $grey
+    text-decoration: underline
+
+    &:hover
+      color: $blue
+
+.copyright
+  font-size: relative-size(11,14)
+  text-align: right
+  display: block
+  padding-top: 10px
+  clear: both
+  +move(4px, bottom)
+
+h6
+  &.error 
+    color: $red
+  &.success
+    color: darken($green, 15%)
+
+.error404, .search-no-results
+  +decorative-content
+    +image-replace("flute.png")
+    bottom: 84px
+    left: 7px
+    +apply-to(less-than, iphone-landscape)
+      display: none
+
+#comments
+  width: 470px
+  margin: $base-margin*5 auto 0
