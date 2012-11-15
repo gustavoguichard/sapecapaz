@@ -1,1097 +1,0 @@
-3.2.1 (Media Mark)
-6cde28cc5f0e63678a512053cad56ef86085ec71
-o:Sass::Tree::RootNode	:@template"A+// This code isn't yet fully tested
-
-// CUSTOM HTML RESETS
-html
-  text-rendering: optimizeLegibility
-  -webkit-font-smoothing: antialiased
-
-= css-techniques($font-size: 16)
-  
-  html
-    font-size: relative-size($font-size,16)
-
-  body
-    font-size: 1em
-    line-height: 1.4
-
-  hr
-    display: block
-    height: 1px
-    border: 0
-    border-top: 1px solid #ccc
-    margin: 1em 0
-    padding: 0
-  
-  // Remove the gap between images and the bottom of their containers: h5bp.com/i/440
-  img
-    vertical-align: middle
-
-  // Remove default fieldset styles.
-  fieldset
-    border: 0
-    margin: 0
-    padding: 0
-  
-  // Allow only vertical resizing of textareas.
-  textarea
-    resize: vertical
-
-// USEFULL MIXINS
-
-// This mixin is simple yet awesome to use, it'll give semantics to your sass code.
-// Use it like so:
-// ul.nav_menu
-//  padding: 20px
-//  +context(footer) // or +context("footer .menu_section") as a string when it's a class or id or a plural css selector.
-//    background: green
-= context($selector)
-  #{$selector} &
-    @content
-
-// IMAGE MIXINS
-// Before using this mixin you should put the images in a folder called sprites
-// and then import'em like so: @import "sprites/*.png"
-= sprite-replace($name, $boilerplate: false)
-  +sprites-sprite($name)
-  @if $boilerplate
-    +boilerplate-image-replace
-  @else
-    +hide-text
-  display: block
-  width: sprites-sprite-width($name)
-  height: sprites-sprite-height($name)
-
-= image-replace($img, $boilerplate: false)
-  @if $boilerplate
-    +boilerplate-image-replace
-  @else
-    +hide-text
-  display: block
-  background-repeat: no-repeat
-  height: image-height($img)
-  width: image-width($img)
-  background-image: image-url($img)
-
-// Don't use this technique if you are stylizing an pseudo element (e.g. decorative-content)
-= boilerplate-image-replace
-  background-color: transparent
-  border: 0
-  overflow: hidden
-  +decorative-content(before, false)
-    width: 0
-    height: 100%
-  // IE 6/7 fallback
-  +ie6-hack
-    text-indent: -9999px
-
-= inline-icon($img, $gap:5px, $pos: left, $padding: 0)
-  background-image: image-url($img)
-  background-repeat: no-repeat
-  @if $pos == right
-    background-position: right top
-    text-align: right
-  @else
-    background-position: left top
-    text-align: left
-  line-height: image-height($img)
-  padding: $padding
-  padding-#{$pos}: image-width($img) + $gap
-
-
-// TEXT MIXIS
-// Use it to set the color, background and text-shadow of selected areas of page
-= selection($no-shadow: true)
-  ::selection
-    @if $no-shadow
-      text-shadow: none
-    @content
-  ::-moz-selection
-    @if $no-shadow
-      text-shadow: none
-    @content
-
-// Set a color for the inputs placeholders. Compass doesn't have it =P
-= placeholder-color($color)
-  &::-webkit-input-placeholder
-    color: $color
-  &:-moz-placeholder
-    color: $color
-  &:-ms-input-placeholder
-    color: $color
-  &:input-placeholder
-    color: $color
-
-@function relative-size($size,$context)
-  @return #{$size/$context}em
-
-= justify($characters-after: 1, $characters-before: 2)
-  hyphens: auto
-  text-align: justify
-  overflow-wrap: hyphenate
-  -webkit-hyphens: auto
-  -webkit-hyphenate-character: "\2010"
-  -webkit-hyphenate-limit-after: $characters-after
-  -webkit-hyphenate-limit-before: $characters-before
-  -moz-hyphens: auto
-
-// POSITIONING MIXINS
-// Call this mixin to place a decorative content around an element, e.g a tape holding a post it.
-// When using the default configurations, you just need to set the dimensions, position and a background
-= decorative-content($position: after, $absolute: true)
-  @if $absolute
-    position: relative
-
-  &:#{$position}
-    content: ""
-    display: block
-    @if $absolute
-      position: absolute
-    @content
-
-
-= absolute-centering($width: 0, $direction: left, $offset: 0)
-  #{$direction}: 50%
-  margin-#{$direction}: - ($width / 2) - $offset
-
-= move($distance, $direction: bottom)
-  position: relative
-  #{$direction}: - $distance
-
-
-// COLOR MIXINS
-// Use this mixin instead of default compass +background-image mixin.
-// Use the first argument is the same as you use in the compass mixin
-// The second and third arguments are colors (probably the colors that you use at the end and start of tha gradient),
-// then compass is gonna mix the colors and support the old f***ing browsers.
-// If you use just one color it'll be the solid color
-= legacy-background-image($options, $color1, $color2: false)
-  @if $color2
-    background-color: mix($color1, $color2)
-  @else
-    background-color: $color1
-  +background-image($options)
-
-= vertical-gradient($color1, $color2, $legacy-mix-color: true)
-  @if $legacy-mix-color
-    +legacy-background-image(linear-gradient(top bottom, $color1, $color2), $color1, $color2)
-  @else
-    +legacy-background-image(linear-gradient(top bottom, $color1, $color2), $color1)
-
-= horizontal-gradient($color1, $color2, $legacy-mix-color: true)
-  @if $legacy-mix-color
-    +legacy-background-image(linear-gradient(left right, $color1, $color2), $color1, $color2)
-  @else
-    +legacy-background-image(linear-gradient(left right, $color1, $color2), $color1)
-
-= rgba($property, $color, $alpha: 1)
-  #{$property}: $color
-  #{$property}: rgba($color, $alpha)
-
-// Accessibility
-= for-blind-people($can-focus: true)
-  border: 0
-  clip: rect(0 0 0 0)
-  height: 1px
-  margin: -1px
-  overflow: hidden
-  padding: 0
-  position: absolute
-  width: 1px
-  @if $can-focus
-    &:active, &:focus
-      clip: auto
-      height: auto
-      margin: 0
-      overflow: visible
-      position: static
-      width: auto
-
-// IE Hacks MIXINS
-= ie6
-  +context(".ie6")
-    @content
-
-= ie6-hack
-  +context("* html")
-    @content
-
-= ie7
-  +context(".ie7")
-    @content
-
-= ie7-hack
-  +context("*+html")
-    @content
-
-= ie8
-  +context(".ie8")
-    @content
-
-= legacy-inline-block
-  display: inline-block
-  *display: inline
-  +has-layout
-
-= has-layout
-  zoom: 1
-
-
-// ANIMATION
-= keyframes($animation-name)
-  @-webkit-keyframes #{$animation-name}
-    @content
-  @-moz-keyframes #{$animation-name}
-    @content
-  @-o-keyframes #{$animation-name}
-    @content
-  @keyframes #{$animation-name}
-    @content
-
-// MEDIA QUERIES MIXINS
-// For the following mixins you can pass ipad, iphone, desktop, desktop-large, ipad-portrait, ipad-landscape, 
-// iphone-portrait, iphone-landscape or retina-display as arguments to the $device variable.
-
-// Screen size variables
-$iphone-portrait: 320px
-$iphone-landscape: 480px
-$ipad-portrait: 768px
-$ipad-landscape: 980px
-$desktop: 1224px
-$desktop-large: 1824px
-
-// Hides the element only in the device you choose
-= hide-on($device)
-  +respond-to($device)
-    display: none
-
-= hide-below($device)
-  +apply-to(less-than, $device)
-    display: none
-
-= hide-above($device)
-  +apply-to(more-than, $device)
-    display: none
-
-// Shows the element only in the device you choose
-= show-on($device)
-  +apply-to(not-on, $device)
-    display: none
-
-
-// The mixins below were inspired from here: https://gist.github.com/3931614 and a bit modified
-// Specific device targeting
-// Use: Only use if you want the style to respond to one device
-// Example:
-//     +respond_to(ipad-landscape)
-// will apply CSS only to an iPad at landscape rotation
-= respond-to($device)
-
-  @if $device == retina-display
-    @media only screen and (-webkit-min-device-pixel-ratio: 1.5), (min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 3/2), (min-device-pixel-ratio: 1.5)
-      @content
-
-  @if $device == iphone
-    @media only screen and (min-width: $iphone-portrait) and (max-width: $iphone-landscape)
-      @content
-
-  @if $device == iphone-landscape
-    @media only screen and (min-width: $iphone-portrait) and (max-width: $iphone-landscape) and (orientation: landscape)
-      @content
-
-  @if $device == iphone-portrait
-    @media only screen and (max-width: $iphone-portrait) and (max-width: $iphone-landscape) and (orientation: portrait)
-      @content
-
-  @if $device == ipad
-    @media only screen and (min-width: $ipad-portrait) and (max-width: $ipad-landscape)
-      @content
-
-  @if $device == ipad-landscape
-    @media only screen and (min-width: $ipad-portrait) and (max-width: $ipad-landscape) and (orientation: landscape)
-      @content
-
-  @if $device == ipad-portrait
-    @media only screen and (max-width: $ipad-portrait) and (max-width: $ipad-landscape) and (orientation: portrait)
-      @content
-
-  @if $device == desktop
-    @media only screen and (min-width: $desktop) and (max-width: $desktop-large)
-      @content
-
-  @if $device == desktop-large
-    @media only screen and (min-width: $desktop-large)
-      @content
-
-// General device targeting
-// Use: Only use if you want the style to apply to many devices
-// Example:
-//     +apply-to(smaller-than, iphone-portrait)
-// will apply CSS to anything smaller than an iphone-portrait
-// Example 2:
-//     +apply-to(not-on, retina-display)
-// will apply CSS to anything but retina-display devices
-= apply-to($filter, $device)
-  
-  $extrema: null
-  @if $filter == less-than
-    $extrema: max
-  @if $filter == more-than
-    $extrema: min
-
-  @if $filter != not-on
-    @if $device == iphone-landscape
-      @media only screen and (#{$extrema}-width: $iphone-landscape)
-        @content
-
-    @if $device == iphone-portrait
-      @media only screen and (#{$extrema}-width: $iphone-portrait)
-        @content
-
-    @if $device == ipad-landscape
-      @media only screen and (#{$extrema}-width: $ipad-landscape)
-        @content
-
-    @if $device == ipad-portrait
-      @media only screen and (#{$extrema}-width: $ipad-portrait)
-        @content
-
-    @if $device == desktop
-      @media only screen and (#{$extrema}-width: $desktop)
-        @content
-
-    @if $device == desktop-large
-      @media only screen and (#{$extrema}-width: $desktop-large)
-        @content
-  @else
-    @if $device == retina-display
-      @media only screen and (-webkit-max-device-pixel-ratio: 1.1), (max--moz-device-pixel-ratio: 1.1), (-o-max-device-pixel-ratio: 1.1), (max-device-pixel-ratio: 1.1)
-        @content
-
-    @if $device == iphone
-      @media only screen and (max-width: $iphone-portrait - 1), (min-width: $iphone-landscape + 1)
-        @content
-
-    @if $device == iphone-landscape
-      @media only screen and (max-width: $iphone-landscape - 1), (min-width: $iphone-landscape + 1)
-        @content
-
-    @if $device == iphone-portrait
-      @media only screen and (max-width: $iphone-portrait - 1), (min-width: $iphone-portrait + 1)
-        @content
-
-    @if $device == ipad
-      @media only screen and (max-width: $ipad-portrait - 1), (min-width: $ipad-landscape + 1)
-        @content
-
-    @if $device == ipad-landscape
-      @media only screen and (max-width: $ipad-landscape - 1), (min-width: $ipad-landscape + 1)
-        @content
-
-    @if $device == ipad-portrait
-      @media only screen and (max-width: $ipad-portrait - 1), (min-width: $ipad-portrait + 1)
-        @content
-
-    @if $device == desktop
-      @media only screen and (max-width: $desktop - 1) and (min-width: $desktop-large)
-        @content
-
-    @if $device == desktop-large
-      @media only screen and (max-width: $desktop-large - 1)
-        @content:@has_childrenT:@options{ :@children[?o:Sass::Tree::CommentNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass:
-@linei;@:
-@type:silent;	[ :@value["(// This code isn't yet fully testedo;
-;@
-;i;@;;;	[ ;["// CUSTOM HTML RESETSo:Sass::Tree::RuleNode;@
-:@parsed_ruleso:"Sass::Selector::CommaSequence;@
-;i	:@members[o:Sass::Selector::Sequence;[o:#Sass::Selector::SimpleSequence
-;@
-;i	:@subject0:@sourceso:Set:
-@hash{ ;[o:Sass::Selector::Element	;@
-;i	:
-@name["	html:@namespace0;i	;T;@:
-@tabsi ;	[o:Sass::Tree::PropNode;@
-;i
-;@;i ;["text-rendering;	[ :@prop_syntax:new;o:Sass::Script::String	;i
-;@;:identifier;"optimizeLegibilityo;;@
-;i;@;i ;["-webkit-font-smoothing;	[ ;; ;o;!	;i;@;;";"antialiased:
-@rule["	htmlo:Sass::Tree::MixinDefNode;@
-;i;T:
-@args[[o:Sass::Script::Variable:@underscored_name"font_size;@;"font-sizeo:Sass::Script::Number:@original"16;i;@:@denominator_units[ ;i:@numerator_units[ ;@;"css-techniques;	[o;;@
-;o;;@
-;i;[o;;[o;
-;@
-;i;0;o;;{ ;[o;	;@
-;i;["	html;0;i;T;@;i ;	[o;;@
-;i;@;i ;["font-size;	[ ;; ;o:Sass::Script::Funcall;i:@keywords{ ;%[o;&	;i;'"font_size;@;"font-sizeo;(;)"16;i;@;*@5;i;+[ ;@;"relative-size:@splat0;#["	htmlo;;@
-;o;;@
-;i;[o;;[o;
-;@
-;i;0;o;;{ ;[o;	;@
-;i;["	body;0;i;T;@;i ;	[o;;@
-;i;@;i ;["font-size;	[ ;; ;o;(;)"1em;i;@;*[ ;i;+["emo;;@
-;i;@;i ;["line-height;	[ ;; ;o;(;)"1.4;i;@;*@5;f1.3999999999999999 ff;+[ ;#["	bodyo;;@
-;o;;@
-;i;[o;;[o;
-;@
-;i;0;o;;{ ;[o;	;@
-;i;["hr;0;i;T;@;i ;	[o;;@
-;i;@;i ;["display;	[ ;; ;o;!	;i;@;;";"
-blocko;;@
-;i;@;i ;["height;	[ ;; ;o;(;)"1px;i;@;*[ ;i;+["pxo;;@
-;i;@;i ;["border;	[ ;; ;o;(;)"0;i;@;*@5;i ;+[ o;;@
-;i;@;i ;["border-top;	[ ;; ;o:Sass::Script::List	;i:@separator:
-space;@;[o;(;)"1px;i;@;*[ ;i;+["pxo;!	;i;@;;";"
-solido:Sass::Script::Color	:@attrs{	:
-alphai:
-greeniÃ:	blueiÃ:rediÃ;i;@;0o;;@
-;i;@;i ;["margin;	[ ;; ;o;/	;i;0;1;@;[o;(;)"1em;i;@;*[ ;i;+["emo;(;)"0;i;@;*@5;i ;+[ o;;@
-;i;@;i ;["padding;	[ ;; ;o;(;)"0;i;@;*@5;i ;+[ ;#["hro;
-;@
-;i;@;;;	[ ;["X// Remove the gap between images and the bottom of their containers: h5bp.com/i/440o;;@
-;o;;@
-;i;[o;;[o;
-;@
-;i;0;o;;{ ;[o;	;@
-;i;["img;0;i;T;@;i ;	[o;;@
-;i ;@;i ;["vertical-align;	[ ;; ;o;!	;i ;@;;";"middle;#["imgo;
-;@
-;i";@;;;	[ ;["'// Remove default fieldset styles.o;;@
-;o;;@
-;i#;[o;;[o;
-;@
-;i#;0;o;;{ ;[o;	;@
-;i#;["fieldset;0;i#;T;@;i ;	[o;;@
-;i$;@;i ;["border;	[ ;; ;o;(;)"0;i$;@;*@5;i ;+[ o;;@
-;i%;@;i ;["margin;	[ ;; ;o;(;)"0;i%;@;*@5;i ;+[ o;;@
-;i&;@;i ;["padding;	[ ;; ;o;(;)"0;i&;@;*@5;i ;+[ ;#["fieldseto;
-;@
-;i(;@;;;	[ ;["2// Allow only vertical resizing of textareas.o;;@
-;o;;@
-;i);[o;;[o;
-;@
-;i);0;o;;{ ;[o;	;@
-;i);["textarea;0;i);T;@;i ;	[o;;@
-;i*;@;i ;["resize;	[ ;; ;o;!	;i*;@;;";"vertical;#["textarea;.0o;
-;@
-;i,;@;;;	[ ;["// USEFULL MIXINSo;
-;@
-;i.;@;;;	[ ;["X// This mixin is simple yet awesome to use, it'll give semantics to your sass code."
-"// Use it like so:"
-"// ul.nav_menu"
-"//  padding: 20px"
-"~//  +context(footer) // or +context("footer .menu_section") as a string when it's a class or id or a plural css selector."
-"//    background: greeno;$;@
-;i4;T;%[[o;&;'"selector;@;"selector0;@;"context;	[o;;@
-;i5;T;@;i ;	[o:Sass::Tree::ContentNode	;@
-;i6;@;	[ ;#[o;&	;i5;'"selector;@;"selector" &;.0o;
-;@
-;i8;@;;;	[ ;[
-"// IMAGE MIXINS"
-"T// Before using this mixin you should put the images in a folder called sprites"
-";// and then import'em like so: @import "sprites/*.png"o;$;@
-;i;;T;%[[o;&;'"	name;@;"	name0[o;&;'"boilerplate;@;"boilerplateo:Sass::Script::Bool;i;;@;F;@;"sprite-replace;	[
-o:Sass::Tree::MixinNode;@
-;i<;-{ ;%[o;&	;i<;'"	name;@;"	name;@;"sprites-sprite;	[ ;.0u:Sass::Tree::IfNodeÓ[o:Sass::Script::Variable	:
-@linei=:@underscored_name"boilerplate:@options{ :
-@name"boilerplateu:Sass::Tree::IfNodeº[00[o:Sass::Tree::MixinNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass:
-@linei@:@keywords{ :
-@args[ :@options{ :
-@name"hide-text:@children[ :@splat0[o:Sass::Tree::MixinNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;i>:@keywords{ :
-@args[ ;@;	"boilerplate-image-replace:@children[ :@splat0o;;@
-;iA;@;i ;["display;	[ ;; ;o;!	;iA;@;;";"
-blocko;;@
-;iB;@;i ;["
-width;	[ ;; ;o;,;iB;-{ ;%[o;&	;iB;'"	name;@;"	name;@;"sprites-sprite-width;.0o;;@
-;iC;@;i ;["height;	[ ;; ;o;,;iC;-{ ;%[o;&	;iC;'"	name;@;"	name;@;"sprites-sprite-height;.0;.0o;$;@
-;iE;T;%[[o;&;'"img;@;"img0[o;&;'"boilerplate;@;"boilerplateo;9;iE;@;F;@;"image-replace;	[u;;Ó[o:Sass::Script::Variable	:
-@lineiF:@underscored_name"boilerplate:@options{ :
-@name"boilerplateu:Sass::Tree::IfNodeº[00[o:Sass::Tree::MixinNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass:
-@lineiI:@keywords{ :
-@args[ :@options{ :
-@name"hide-text:@children[ :@splat0[o:Sass::Tree::MixinNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;iG:@keywords{ :
-@args[ ;@;	"boilerplate-image-replace:@children[ :@splat0o;;@
-;iJ;@;i ;["display;	[ ;; ;o;!	;iJ;@;;";"
-blocko;;@
-;iK;@;i ;["background-repeat;	[ ;; ;o;!	;iK;@;;";"no-repeato;;@
-;iL;@;i ;["height;	[ ;; ;o;,;iL;-{ ;%[o;&	;iL;'"img;@;"img;@;"image-height;.0o;;@
-;iM;@;i ;["
-width;	[ ;; ;o;,;iM;-{ ;%[o;&	;iM;'"img;@;"img;@;"image-width;.0o;;@
-;iN;@;i ;["background-image;	[ ;; ;o;,;iN;-{ ;%[o;&	;iN;'"img;@;"img;@;"image-url;.0;.0o;
-;@
-;iP;@;;;	[ ;["a// Don't use this technique if you are stylizing an pseudo element (e.g. decorative-content)o;$;@
-;iQ;T;%[ ;@;"boilerplate-image-replace;	[o;;@
-;iR;@;i ;["background-color;	[ ;; ;o;!	;iR;@;;";"transparento;;@
-;iS;@;i ;["border;	[ ;; ;o;(;)"0;iS;@;*@5;i ;+[ o;;@
-;iT;@;i ;["overflow;	[ ;; ;o;!	;iT;@;;";"hiddeno;:;@
-;iU;-{ ;T;%[o;!	;iU;@;;";"beforeo;9;iU;@;F;@;"decorative-content;	[o;;@
-;iV;@;i ;["
-width;	[ ;; ;o;(;)"0;iV;@;*@5;i ;+[ o;;@
-;iW;@;i ;["height;	[ ;; ;o;(;)"	100%;iW;@;*[ ;ii;+["%;.0o;
-;@
-;iX;@;;;	[ ;["// IE 6/7 fallbacko;:;@
-;iY;-{ ;T;%[ ;@;"ie6-hack;	[o;;@
-;iZ;@;i ;["text-indent;	[ ;; ;o;(;)"-9999px;iZ;@;*[ ;i˛Òÿ;+["px;.0;.0o;$;@
-;i\;T;%[	[o;&;'"img;@;"img0[o;&;'"gap;@;"gapo;(;)"5px;i\;@;*[ ;i
-;+["px[o;&;'"pos;@;"poso;!	;i\;@;;";"	left[o;&;'"padding;@;"paddingo;(;)"0;i\;@;*@5;i ;+[ ;@;"inline-icon;	[o;;@
-;i];@;i ;["background-image;	[ ;; ;o;,;i];-{ ;%[o;&	;i];'"img;@;"img;@;"image-url;.0o;;@
-;i^;@;i ;["background-repeat;	[ ;; ;o;!	;i^;@;;";"no-repeatu;;Ï[o:Sass::Script::Operation
-:
-@linei_:@operand2o:Sass::Script::String	;i_:@options{ :
-@type:identifier:@value"
-right:@operand1o:Sass::Script::Variable	;i_:@underscored_name"pos;	@:
-@name"pos;	@:@operator:equ:Sass::Tree::IfNodeô[00[o:Sass::Tree::PropNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass:
-@lineic:@options{ :
-@tabsi :
-@name["background-position:@children[ :@prop_syntax:new:@valueo:Sass::Script::List	;ic:@separator:
-space;@	;[o:Sass::Script::String	;ic;@	:
-@type:identifier;"	lefto;	;ic;@	;;;"topo; ;@;id;@	;	i ;
-["text-align;[ ;;;o;	;id;@	;;;"	left[o:Sass::Tree::PropNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;i`;	@:
-@tabsi ;["background-position:@children[ :@prop_syntax:new;o:Sass::Script::List	;i`:@separator:
-space;	@;[o;	;i`;	@;
-;;"
-righto;	;i`;	@;
-;;"topo;;@;ia;	@;i ;["text-align;[ ;;;o;	;ia;	@;
-;;"
-righto;;@
-;ie;@;i ;["line-height;	[ ;; ;o;,;ie;-{ ;%[o;&	;ie;'"img;@;"img;@;"image-height;.0o;;@
-;if;@;i ;["padding;	[ ;; ;o;&	;if;'"padding;@;"paddingo;;@
-;ig;@;i ;["padding-o;&	;ig;'"pos;@;"pos" ;	[ ;; ;o:Sass::Script::Operation
-;ig:@operand2o;&	;ig;'"gap;@;"gap:@operand1o;,;ig;-{ ;%[o;&	;ig;'"img;@;"img;@;"image-width;.0;@:@operator:	plus;.0o;
-;@
-;ij;@;;;	[ ;["// TEXT MIXIS"
-"U// Use it to set the color, background and text-shadow of selected areas of pageo;$;@
-;il;T;%[[o;&;'"no_shadow;@;"no-shadowo;9;il;@;T;@;"selection;	[o;;@
-;o;;@
-;im;[o;;[o;
-;@
-;im;0;o;;{ ;[o:Sass::Selector::Pseudo
-;@
-;im;["selection;:element:	@arg0;im;T;@;i ;	[u;;K[o:Sass::Script::Variable	:
-@linein:@underscored_name"no_shadow:@options{ :
-@name"no-shadow0[o:Sass::Tree::PropNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;io;@:
-@tabsi ;	["text-shadow:@children[ :@prop_syntax:new:@valueo:Sass::Script::String	;io;@:
-@type:identifier;"	noneo;8	;@
-;ip;@;	[ ;#["::selectiono;;@
-;o;;@
-;iq;[o;;[o;
-;@
-;iq;0;o;;{ ;[o;A
-;@
-;iq;["-moz-selection;;B;C0;iq;T;@;i ;	[u;;K[o:Sass::Script::Variable	:
-@lineir:@underscored_name"no_shadow:@options{ :
-@name"no-shadow0[o:Sass::Tree::PropNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;is;@:
-@tabsi ;	["text-shadow:@children[ :@prop_syntax:new:@valueo:Sass::Script::String	;is;@:
-@type:identifier;"	noneo;8	;@
-;it;@;	[ ;#["::-moz-selection;.0o;
-;@
-;iv;@;;;	[ ;["K// Set a color for the inputs placeholders. Compass doesn't have it =Po;$;@
-;iw;T;%[[o;&;'"
-color;@;"
-color0;@;"placeholder-color;	[	o;;@
-;o;;@
-;ix;[o;;[o;
-;@
-;ix;0;o;;{ ;[o:Sass::Selector::Parent;@
-;ixo;A
-;@
-;ix;["-webkit-input-placeholder;;B;C0;ix;T;@;i ;	[o;;@
-;iy;@;i ;["
-color;	[ ;; ;o;&	;iy;'"
-color;@;"
-color;#["!&::-webkit-input-placeholdero;;@
-;o;;@
-;iz;[o;;[o;
-;@
-;iz;0;o;;{ ;[o;D;@
-;izo;A
-;@
-;iz;["-moz-placeholder;:
-class;C0;iz;T;@;i ;	[o;;@
-;i{;@;i ;["
-color;	[ ;; ;o;&	;i{;'"
-color;@;"
-color;#["&:-moz-placeholdero;;@
-;o;;@
-;i|;[o;;[o;
-;@
-;i|;0;o;;{ ;[o;D;@
-;i|o;A
-;@
-;i|;["-ms-input-placeholder;;E;C0;i|;T;@;i ;	[o;;@
-;i};@;i ;["
-color;	[ ;; ;o;&	;i};'"
-color;@;"
-color;#["&:-ms-input-placeholdero;;@
-;o;;@
-;i~;[o;;[o;
-;@
-;i~;0;o;;{ ;[o;D;@
-;i~o;A
-;@
-;i~;["input-placeholder;;E;C0;i~;T;@;i ;	[o;;@
-;i;@;i ;["
-color;	[ ;; ;o;&	;i;'"
-color;@;"
-color;#["&:input-placeholder;.0o:Sass::Tree::FunctionNode;@
-;i|;T;%[[o;&;'"	size;@;"	size0[o;&;'"context;@;"context0;@;"relative-size;	[o:Sass::Tree::ReturnNode
-;@
-;i}:
-@expro: Sass::Script::Interpolation:@aftero;!	;i};@;;";"em;i}:@originally_textF:	@mido;<
-;i};=o;&	;i};'"context;@;"context;>o;&	;i};'"	size;@;"	size;@;?:div:@whitespace_after0;@:@before0:@whitespace_before0;@;	[ ;.0o;$;@
-;i;T;%[[o;&;'"characters_after;@;"characters-aftero;(;)"1;i;@;*@5;i;+[ [o;&;'"characters_before;@;"characters-beforeo;(;)"2;i;@;*@5;i;+[ ;@;"justify;	[o;;@
-;iÄ;@;i ;["hyphens;	[ ;; ;o;!	;iÄ;@;;";"	autoo;;@
-;iÅ;@;i ;["text-align;	[ ;; ;o;!	;iÅ;@;;";"justifyo;;@
-;iÇ;@;i ;["overflow-wrap;	[ ;; ;o;!	;iÇ;@;;";"hyphenateo;;@
-;iÉ;@;i ;["-webkit-hyphens;	[ ;; ;o;!	;iÉ;@;;";"	autoo;;@
-;iÑ;@;i ;[" -webkit-hyphenate-character;	[ ;; ;o;!	;iÑ;@;:string;"
-\2010o;;@
-;iÖ;@;i ;[""-webkit-hyphenate-limit-after;	[ ;; ;o;&	;iÖ;'"characters_after;@;"characters-aftero;;@
-;iÜ;@;i ;["#-webkit-hyphenate-limit-before;	[ ;; ;o;&	;iÜ;'"characters_before;@;"characters-beforeo;;@
-;iá;@;i ;["-moz-hyphens;	[ ;; ;o;!	;iá;@;;";"	auto;.0o;
-;@
-;iâ;@;;;	[ ;[
-"// POSITIONING MIXINS"
-"f// Call this mixin to place a decorative content around an element, e.g a tape holding a post it."
-"m// When using the default configurations, you just need to set the dimensions, position and a backgroundo;$;@
-;iå;T;%[[o;&;'"position;@;"positiono;!	;iå;@;;";"
-after[o;&;'"absolute;@;"absoluteo;9;iå;@;T;@;"decorative-content;	[u;;M[o:Sass::Script::Variable	:
-@lineiç:@underscored_name"absolute:@options{ :
-@name"absolute0[o:Sass::Tree::PropNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;ié;@:
-@tabsi ;	["position:@children[ :@prop_syntax:new:@valueo:Sass::Script::String	;ié;@:
-@type:identifier;"relativeo;;@
-;iê;T;@;i ;	[	o;;@
-;ië;@;i ;["content;	[ ;; ;o;!	;ië;@;;Q;" o;;@
-;ií;@;i ;["display;	[ ;; ;o;!	;ií;@;;";"
-blocku;;M[o:Sass::Script::Variable	:
-@lineiì:@underscored_name"absolute:@options{ :
-@name"absolute0[o:Sass::Tree::PropNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;iî;@:
-@tabsi ;	["position:@children[ :@prop_syntax:new:@valueo:Sass::Script::String	;iî;@:
-@type:identifier;"absoluteo;8	;@
-;iï;@;	[ ;#["&:o;&	;iê;'"position;@;"position" ;.0o;$;@
-;iò;T;%[[o;&;'"
-width;@;"
-widtho;(;)"0;iò;@;*@5;i ;+[ [o;&;'"direction;@;"directiono;!	;iò;@;;";"	left[o;&;'"offset;@;"offseto;(;)"0;iò;@;*@5;i ;+[ ;@;"absolute-centering;	[o;;@
-;iô;@;i ;[" o;&	;iô;'"direction;@;"direction" ;	[ ;; ;o;(;)"50%;iô;@;*[ ;i7;+["%o;;@
-;iö;@;i ;["margin-o;&	;iö;'"direction;@;"direction" ;	[ ;; ;o;<
-;iö;=o;&	;iö;'"offset;@;"offset;>o:!Sass::Script::UnaryOperation	;iö;@:@operando;<
-;iö;=o;(;)"2;iö;@;*@5;i;+[ ;>o;&	;iö;'"
-width;@;"
-width;@;?;M;?:
-minus;@;?;T;.0o;$;@
-;iú;T;%[[o;&;'"distance;@;"distance0[o;&;'"direction;@;"directiono;!	;iú;@;;";"bottom;@;"	move;	[o;;@
-;iù;@;i ;["position;	[ ;; ;o;!	;iù;@;;";"relativeo;;@
-;iû;@;i ;[" o;&	;iû;'"direction;@;"direction" ;	[ ;; ;o;R	;iû;@;So;&	;iû;'"distance;@;"distance;?;T;.0o;
-;@
-;i°;@;;;	[ ;["// COLOR MIXINS"
-"J// Use this mixin instead of default compass +background-image mixin."
-"J// Use the first argument is the same as you use in the compass mixin"
-"z// The second and third arguments are colors (probably the colors that you use at the end and start of tha gradient),"
-"R// then compass is gonna mix the colors and support the old f***ing browsers."
-":// If you use just one color it'll be the solid coloro;$;@
-;iß;T;%[[o;&;'"options;@;"options0[o;&;'"color1;@;"color10[o;&;'"color2;@;"color2o;9;iß;@;F;@;"legacy-background-image;	[u;;ƒ[o:Sass::Script::Variable	:
-@linei®:@underscored_name"color2:@options{ :
-@name"color2u:Sass::Tree::IfNode[00[o:Sass::Tree::PropNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass:
-@linei´:@options{ :
-@tabsi :
-@name["background-color:@children[ :@prop_syntax:new:@valueo:Sass::Script::Variable	;i´:@underscored_name"color1;@	;
-"color1[o:Sass::Tree::PropNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;i©;@:
-@tabsi ;	["background-color:@children[ :@prop_syntax:new:@valueo:Sass::Script::Funcall;i©:@keywords{ :
-@args[o; 	;i©;"color1;@;	"color1o; 	;i©;"color2;@;	"color2;@;	"mix:@splat0o;:;@
-;i¨;-{ ;%[o;&	;i¨;'"options;@;"options;@;"background-image;	[ ;.0;.0o;$;@
-;iÆ;T;%[[o;&;'"color1;@;"color10[o;&;'"color2;@;"color20[o;&;'"legacy_mix_color;@;"legacy-mix-coloro;9;iÆ;@;T;@;"vertical-gradient;	[u;;∫[o:Sass::Script::Variable	:
-@lineiØ:@underscored_name"legacy_mix_color:@options{ :
-@name"legacy-mix-coloru:Sass::Tree::IfNode'[00[o:Sass::Tree::MixinNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass:
-@linei≤:@keywords{ :
-@args[o:Sass::Script::Funcall;i≤;{ ;	[o:Sass::Script::List	;i≤:@separator:
-space:@options{ :@value[o:Sass::Script::String	;i≤;@:
-@type:identifier;"topo;	;i≤;@;;;"bottomo:Sass::Script::Variable	;i≤:@underscored_name"color1;@:
-@name"color1o;	;i≤;"color2;@;"color2;@;"linear-gradient:@splat0o;	;i≤;"color1;@;"color1;@;"legacy-background-image:@children[ ;0[o:Sass::Tree::MixinNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;i∞:@keywords{ :
-@args[o:Sass::Script::Funcall;i∞;{ ;[o:Sass::Script::List	;i∞:@separator:
-space;@:@value[o:Sass::Script::String	;i∞;@:
-@type:identifier;"topo;	;i∞;@;;;"bottomo; 	;i∞;"color1;@;	"color1o; 	;i∞;"color2;@;	"color2;@;	"linear-gradient:@splat0o; 	;i∞;"color1;@;	"color1o; 	;i∞;"color2;@;	"color2;@;	"legacy-background-image:@children[ ;0;.0o;$;@
-;i¥;T;%[[o;&;'"color1;@;"color10[o;&;'"color2;@;"color20[o;&;'"legacy_mix_color;@;"legacy-mix-coloro;9;i¥;@;T;@;"horizontal-gradient;	[u;;∫[o:Sass::Script::Variable	:
-@lineiµ:@underscored_name"legacy_mix_color:@options{ :
-@name"legacy-mix-coloru:Sass::Tree::IfNode'[00[o:Sass::Tree::MixinNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass:
-@linei∏:@keywords{ :
-@args[o:Sass::Script::Funcall;i∏;{ ;	[o:Sass::Script::List	;i∏:@separator:
-space:@options{ :@value[o:Sass::Script::String	;i∏;@:
-@type:identifier;"	lefto;	;i∏;@;;;"
-righto:Sass::Script::Variable	;i∏:@underscored_name"color1;@:
-@name"color1o;	;i∏;"color2;@;"color2;@;"linear-gradient:@splat0o;	;i∏;"color1;@;"color1;@;"legacy-background-image:@children[ ;0[o:Sass::Tree::MixinNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;i∂:@keywords{ :
-@args[o:Sass::Script::Funcall;i∂;{ ;[o:Sass::Script::List	;i∂:@separator:
-space;@:@value[o:Sass::Script::String	;i∂;@:
-@type:identifier;"	lefto;	;i∂;@;;;"
-righto; 	;i∂;"color1;@;	"color1o; 	;i∂;"color2;@;	"color2;@;	"linear-gradient:@splat0o; 	;i∂;"color1;@;	"color1o; 	;i∂;"color2;@;	"color2;@;	"legacy-background-image:@children[ ;0;.0o;$;@
-;i∫;T;%[[o;&;'"property;@;"property0[o;&;'"
-color;@;"
-color0[o;&;'"
-alpha;@;"
-alphao;(;)"1;i∫;@;*@5;i;+[ ;@;"	rgba;	[o;;@
-;iª;@;i ;[" o;&	;iª;'"property;@;"property" ;	[ ;; ;o;&	;iª;'"
-color;@;"
-coloro;;@
-;iº;@;i ;[" o;&	;iº;'"property;@;"property" ;	[ ;; ;o;,;iº;-{ ;%[o;&	;iº;'"
-color;@;"
-coloro;&	;iº;'"
-alpha;@;"
-alpha;@;"	rgba;.0;.0o;
-;@
-;iæ;@;;;	[ ;["// Accessibilityo;$;@
-;iø;T;%[[o;&;'"can_focus;@;"can-focuso;9;iø;@;T;@;"for-blind-people;	[o;;@
-;i¿;@;i ;["border;	[ ;; ;o;(;)"0;i¿;@;*@5;i ;+[ o;;@
-;i¡;@;i ;["	clip;	[ ;; ;o;,;i¡;-{ ;%[o;/	;i¡;0;1;@;[	o;(;)"0;i¡;@;*@5;i ;+[ o;(;)"0;i¡;@;*@5;i ;+[ o;(;)"0;i¡;@;*@5;i ;+[ o;(;)"0;i¡;@;*@5;i ;+[ ;@;"	rect;.0o;;@
-;i¬;@;i ;["height;	[ ;; ;o;(;)"1px;i¬;@;*[ ;i;+["pxo;;@
-;i√;@;i ;["margin;	[ ;; ;o;(;)"	-1px;i√;@;*[ ;i˙;+["pxo;;@
-;iƒ;@;i ;["overflow;	[ ;; ;o;!	;iƒ;@;;";"hiddeno;;@
-;i≈;@;i ;["padding;	[ ;; ;o;(;)"0;i≈;@;*@5;i ;+[ o;;@
-;i∆;@;i ;["position;	[ ;; ;o;!	;i∆;@;;";"absoluteo;;@
-;i«;@;i ;["
-width;	[ ;; ;o;(;)"1px;i«;@;*[ ;i;+["pxu;;≠[o:Sass::Script::Variable	:
-@linei»:@underscored_name"can_focus:@options{ :
-@name"can-focus0[o:Sass::Tree::RuleNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass:@parsed_ruleso:"Sass::Selector::CommaSequence;@;i…:@members[o:Sass::Selector::Sequence;[o:#Sass::Selector::SimpleSequence
-;@;i…:@subject0:@sourceso:Set:
-@hash{ ;[o:Sass::Selector::Parent;@;i…o:Sass::Selector::Pseudo
-;@;i…;	["active:
-@type:
-class:	@arg0o;;[o;
-;@;i…;0;o;;{ ;[o;;@;i…o;
-;@;i…;	["
-focus;;;0;i…:@has_childrenT;@:
-@tabsi :@children[o:Sass::Tree::PropNode;@;i ;@;i ;	["	clip;[ :@prop_syntax:new:@valueo:Sass::Script::String	;i ;@;:identifier; "	autoo;;@;iÀ;@;i ;	["height;[ ;;; o;!	;iÀ;@;;"; "	autoo;;@;iÃ;@;i ;	["margin;[ ;;; o:Sass::Script::Number:@original"0;iÃ;@:@denominator_units[ ; i :@numerator_units[ o;;@;iÕ;@;i ;	["overflow;[ ;;; o;!	;iÕ;@;;"; "visibleo;;@;iŒ;@;i ;	["position;[ ;;; o;!	;iŒ;@;;"; "statico;;@;iœ;@;i ;	["
-width;[ ;;; o;!	;iœ;@;;"; "	auto:
-@rule["&:active, &:focus;.0o;
-;@
-;i—;@;;;	[ ;["// IE Hacks MIXINSo;$;@
-;i“;T;%[ ;@;"ie6;	[o;:;@
-;i”;-{ ;T;%[o;!	;i”;@;;Q;"	.ie6;@;"context;	[o;8	;@
-;i‘;@;	[ ;.0;.0o;$;@
-;i÷;T;%[ ;@;"ie6-hack;	[o;:;@
-;i◊;-{ ;T;%[o;!	;i◊;@;;Q;"* html;@;"context;	[o;8	;@
-;iÿ;@;	[ ;.0;.0o;$;@
-;i⁄;T;%[ ;@;"ie7;	[o;:;@
-;i€;-{ ;T;%[o;!	;i€;@;;Q;"	.ie7;@;"context;	[o;8	;@
-;i‹;@;	[ ;.0;.0o;$;@
-;iﬁ;T;%[ ;@;"ie7-hack;	[o;:;@
-;iﬂ;-{ ;T;%[o;!	;iﬂ;@;;Q;"*+html;@;"context;	[o;8	;@
-;i‡;@;	[ ;.0;.0o;$;@
-;i‚;T;%[ ;@;"ie8;	[o;:;@
-;i„;-{ ;T;%[o;!	;i„;@;;Q;"	.ie8;@;"context;	[o;8	;@
-;i‰;@;	[ ;.0;.0o;$;@
-;iÊ;T;%[ ;@;"legacy-inline-block;	[o;;@
-;iÁ;@;i ;["display;	[ ;; ;o;!	;iÁ;@;;";"inline-blocko;;@
-;iË;@;i ;["*display;	[ ;; ;o;!	;iË;@;;";"inlineo;:;@
-;iÈ;-{ ;%[ ;@;"has-layout;	[ ;.0;.0o;$;@
-;iÎ;T;%[ ;@;"has-layout;	[o;;@
-;iÏ;@;i ;["	zoom;	[ ;; ;o;(;)"1;iÏ;@;*@5;i;+[ ;.0o;
-;@
-;iÔ;@;;;	[ ;["// ANIMATIONo;$;@
-;i;T;%[[o;&;'"animation_name;@;"animation-name0;@;"keyframes;	[	o:Sass::Tree::DirectiveNode;@
-;iÒ;T;@;	[o;8	;@
-;iÚ;@;	[ ;[
-"@-webkit-keyframes " " o;&	;iÒ;'"animation_name;@;"animation-name" o;U;@
-;iÛ;T;@;	[o;8	;@
-;iÙ;@;	[ ;[
-"@-moz-keyframes " " o;&	;iÛ;'"animation_name;@;"animation-name" o;U;@
-;iı;T;@;	[o;8	;@
-;iˆ;@;	[ ;[
-"@-o-keyframes " " o;&	;iı;'"animation_name;@;"animation-name" o;U;@
-;i˜;T;@;	[o;8	;@
-;i¯;@;	[ ;[
-"@keyframes " " o;&	;i˜;'"animation_name;@;"animation-name" ;.0o;
-;@
-;i˙;@;;;	[ ;[
-"// MEDIA QUERIES MIXINS"
-"r// For the following mixins you can pass ipad, iphone, desktop, desktop-large, ipad-portrait, ipad-landscape,"
-"a// iphone-portrait, iphone-landscape or retina-display as arguments to the $device variable.o;
-;@
-;i˛;@;;;	[ ;["// Screen size variableso:Sass::Tree::VariableNode;@
-:@guarded0;iˇ;Ho;(;)"
-320px;iˇ;@;*[ ;i@;+["px;@;"iphone-portrait;	[ o;V;@
-;W0;i ;Ho;(;)"
-480px;i ;@;*[ ;i‡;+["px;@;"iphone-landscape;	[ o;V;@
-;W0;i;Ho;(;)"
-768px;i;@;*[ ;i ;+["px;@;"ipad-portrait;	[ o;V;@
-;W0;i;Ho;(;)"
-980px;i;@;*[ ;i‘;+["px;@;"ipad-landscape;	[ o;V;@
-;W0;i;Ho;(;)"1224px;i;@;*[ ;i»;+["px;@;"desktop;	[ o;V;@
-;W0;i;Ho;(;)"1824px;i;@;*[ ;i ;+["px;@;"desktop-large;	[ o;
-;@
-;i;@;;;	[ ;["7// Hides the element only in the device you chooseo;$;@
-;i;T;%[[o;&;'"device;@;"device0;@;"hide-on;	[o;:;@
-;i;-{ ;T;%[o;&	;i;'"device;@;"device;@;"respond-to;	[o;;@
-;i	;@;i ;["display;	[ ;; ;o;!	;i	;@;;";"	none;.0;.0o;$;@
-;i;T;%[[o;&;'"device;@;"device0;@;"hide-below;	[o;:;@
-;i;-{ ;T;%[o;!	;i;@;;";"less-thano;&	;i;'"device;@;"device;@;"apply-to;	[o;;@
-;i;@;i ;["display;	[ ;; ;o;!	;i;@;;";"	none;.0;.0o;$;@
-;i;T;%[[o;&;'"device;@;"device0;@;"hide-above;	[o;:;@
-;i;-{ ;T;%[o;!	;i;@;;";"more-thano;&	;i;'"device;@;"device;@;"apply-to;	[o;;@
-;i;@;i ;["display;	[ ;; ;o;!	;i;@;;";"	none;.0;.0o;
-;@
-;i;@;;;	[ ;["7// Shows the element only in the device you chooseo;$;@
-;i;T;%[[o;&;'"device;@;"device0;@;"show-on;	[o;:;@
-;i;-{ ;T;%[o;!	;i;@;;";"not-ono;&	;i;'"device;@;"device;@;"apply-to;	[o;;@
-;i;@;i ;["display;	[ ;; ;o;!	;i;@;;";"	none;.0;.0o;
-;@
-;i;@;;;	[ ;["d// The mixins below were inspired from here: https://gist.github.com/3931614 and a bit modified"
-"!// Specific device targeting"
-"D// Use: Only use if you want the style to respond to one device"
-"// Example:"
-"'//     +respond_to(ipad-landscape)"
-"<// will apply CSS only to an iPad at landscape rotationo;$;@
-;i;T;%[[o;&;'"device;@;"device0;@;"respond-to;	[u;;œ[o:Sass::Script::Operation
-:
-@linei!:@operand2o:Sass::Script::String	;i!:@options{ :
-@type:identifier:@value"retina-display:@operand1o:Sass::Script::Variable	;i!:@underscored_name"device;	@:
-@name"device;	@:@operator:eq0[o:Sass::Tree::MediaNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;i":@has_childrenT;	@:
-@tabsi :@children[o:Sass::Tree::ContentNode	;@;i#;	@;[ :@query[ "	only" "screen"
- and "(o;	;i";	@;
-;;"#-webkit-min-device-pixel-ratio": o:Sass::Script::Number:@original"1.5;i";	@:@denominator_units[ ;f1.5:@numerator_units[ ")", "(o;	;i";	@;
-;;" min--moz-device-pixel-ratio": o;;"1.5;i";	@;@;f1.5;[ ")@""(o;	;i";	@;
-;;"-o-min-device-pixel-ratio": o; 
-;i";o;;"2;i";	@;@;i;[ ;o;;"3;i";	@;@;i;[ ;	@;:div")@""(o;	;i";	@;
-;;"min-device-pixel-ratio": o;;"1.5;i";	@;@;f1.5;[ ");" u;;ò[o:Sass::Script::Operation
-:
-@linei%:@operand2o:Sass::Script::String	;i%:@options{ :
-@type:identifier:@value"iphone:@operand1o:Sass::Script::Variable	;i%:@underscored_name"device;	@:
-@name"device;	@:@operator:eq0[o:Sass::Tree::MediaNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;i&:@has_childrenT;	@:
-@tabsi :@children[o:Sass::Tree::ContentNode	;@;i';	@;[ :@query["	only" "screen"
- and "(o;	;i&;	@;
-;;"min-width": o;	;i&;"iphone_portrait;	@;"iphone-portrait")"
- and "(o;	;i&;	@;
-;;"max-width": o;	;i&;"iphone_landscape;	@;"iphone-landscape");" u;;Ó[o:Sass::Script::Operation
-:
-@linei):@operand2o:Sass::Script::String	;i):@options{ :
-@type:identifier:@value"iphone-landscape:@operand1o:Sass::Script::Variable	;i):@underscored_name"device;	@:
-@name"device;	@:@operator:eq0[o:Sass::Tree::MediaNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;i*:@has_childrenT;	@:
-@tabsi :@children[o:Sass::Tree::ContentNode	;@;i+;	@;[ :@query["	only" "screen"
- and "(o;	;i*;	@;
-;;"min-width": o;	;i*;"iphone_portrait;	@;"iphone-portrait")"
- and "(o;	;i*;	@;
-;;"max-width": o;	;i*;"iphone_landscape;	@;"iphone-landscape")@ "(o;	;i*;	@;
-;;"orientation": o;	;i*;	@;
-;;"landscape");" u;;Ï[o:Sass::Script::Operation
-:
-@linei-:@operand2o:Sass::Script::String	;i-:@options{ :
-@type:identifier:@value"iphone-portrait:@operand1o:Sass::Script::Variable	;i-:@underscored_name"device;	@:
-@name"device;	@:@operator:eq0[o:Sass::Tree::MediaNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;i.:@has_childrenT;	@:
-@tabsi :@children[o:Sass::Tree::ContentNode	;@;i/;	@;[ :@query["	only" "screen"
- and "(o;	;i.;	@;
-;;"max-width": o;	;i.;"iphone_portrait;	@;"iphone-portrait")"
- and "(o;	;i.;	@;
-;;"max-width": o;	;i.;"iphone_landscape;	@;"iphone-landscape")@ "(o;	;i.;	@;
-;;"orientation": o;	;i.;	@;
-;;"portrait");" u;;é[o:Sass::Script::Operation
-:
-@linei1:@operand2o:Sass::Script::String	;i1:@options{ :
-@type:identifier:@value"	ipad:@operand1o:Sass::Script::Variable	;i1:@underscored_name"device;	@:
-@name"device;	@:@operator:eq0[o:Sass::Tree::MediaNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;i2:@has_childrenT;	@:
-@tabsi :@children[o:Sass::Tree::ContentNode	;@;i3;	@;[ :@query["	only" "screen"
- and "(o;	;i2;	@;
-;;"min-width": o;	;i2;"ipad_portrait;	@;"ipad-portrait")"
- and "(o;	;i2;	@;
-;;"max-width": o;	;i2;"ipad_landscape;	@;"ipad-landscape");" u;;‰[o:Sass::Script::Operation
-:
-@linei5:@operand2o:Sass::Script::String	;i5:@options{ :
-@type:identifier:@value"ipad-landscape:@operand1o:Sass::Script::Variable	;i5:@underscored_name"device;	@:
-@name"device;	@:@operator:eq0[o:Sass::Tree::MediaNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;i6:@has_childrenT;	@:
-@tabsi :@children[o:Sass::Tree::ContentNode	;@;i7;	@;[ :@query["	only" "screen"
- and "(o;	;i6;	@;
-;;"min-width": o;	;i6;"ipad_portrait;	@;"ipad-portrait")"
- and "(o;	;i6;	@;
-;;"max-width": o;	;i6;"ipad_landscape;	@;"ipad-landscape")@ "(o;	;i6;	@;
-;;"orientation": o;	;i6;	@;
-;;"landscape");" u;;‚[o:Sass::Script::Operation
-:
-@linei9:@operand2o:Sass::Script::String	;i9:@options{ :
-@type:identifier:@value"ipad-portrait:@operand1o:Sass::Script::Variable	;i9:@underscored_name"device;	@:
-@name"device;	@:@operator:eq0[o:Sass::Tree::MediaNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;i::@has_childrenT;	@:
-@tabsi :@children[o:Sass::Tree::ContentNode	;@;i;;	@;[ :@query["	only" "screen"
- and "(o;	;i:;	@;
-;;"max-width": o;	;i:;"ipad_portrait;	@;"ipad-portrait")"
- and "(o;	;i:;	@;
-;;"max-width": o;	;i:;"ipad_landscape;	@;"ipad-landscape")@ "(o;	;i:;	@;
-;;"orientation": o;	;i:;	@;
-;;"portrait");" u;;É[o:Sass::Script::Operation
-:
-@linei=:@operand2o:Sass::Script::String	;i=:@options{ :
-@type:identifier:@value"desktop:@operand1o:Sass::Script::Variable	;i=:@underscored_name"device;	@:
-@name"device;	@:@operator:eq0[o:Sass::Tree::MediaNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;i>:@has_childrenT;	@:
-@tabsi :@children[o:Sass::Tree::ContentNode	;@;i?;	@;[ :@query["	only" "screen"
- and "(o;	;i>;	@;
-;;"min-width": o;	;i>;"desktop;	@;"desktop")"
- and "(o;	;i>;	@;
-;;"max-width": o;	;i>;"desktop_large;	@;"desktop-large");" u;;5[o:Sass::Script::Operation
-:
-@lineiA:@operand2o:Sass::Script::String	;iA:@options{ :
-@type:identifier:@value"desktop-large:@operand1o:Sass::Script::Variable	;iA:@underscored_name"device;	@:
-@name"device;	@:@operator:eq0[o:Sass::Tree::MediaNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;iB:@has_childrenT;	@:
-@tabsi :@children[o:Sass::Tree::ContentNode	;@;iC;	@;[ :@query["	only" "screen"
- and "(o;	;iB;	@;
-;;"min-width": o;	;iB;"desktop_large;	@;"desktop-large");" ;.0o;
-;@
-;iE;@;;;	[ ;[" // General device targeting"
-"D// Use: Only use if you want the style to apply to many devices"
-"// Example:"
-"4//     +apply-to(smaller-than, iphone-portrait)"
-"B// will apply CSS to anything smaller than an iphone-portrait"
-"// Example 2:"
-"-//     +apply-to(not-on, retina-display)"
-"=// will apply CSS to anything but retina-display deviceso;$;@
-;iM;T;%[[o;&;'"filter;@;"filter0[o;&;'"device;@;"device0;@;"apply-to;	[	o;V;@
-;W0;iO;Ho:Sass::Script::Null;iO;@;0;@;"extrema;	[ u;;•[o:Sass::Script::Operation
-:
-@lineiP:@operand2o:Sass::Script::String	;iP:@options{ :
-@type:identifier:@value"less-than:@operand1o:Sass::Script::Variable	;iP:@underscored_name"filter;	@:
-@name"filter;	@:@operator:eq0[o:Sass::Tree::VariableNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass:@guarded0;iQ:
-@expro;	;iQ;	@;
-;;"max;	@;"extrema:@children[ u;;•[o:Sass::Script::Operation
-:
-@lineiR:@operand2o:Sass::Script::String	;iR:@options{ :
-@type:identifier:@value"more-than:@operand1o:Sass::Script::Variable	;iR:@underscored_name"filter;	@:
-@name"filter;	@:@operator:eq0[o:Sass::Tree::VariableNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass:@guarded0;iS:
-@expro;	;iS;	@;
-;;"min;	@;"extrema:@children[ u;;Ø/[o:Sass::Script::Operation
-:
-@lineiU:@operand2o:Sass::Script::String	;iU:@options{ :
-@type:identifier:@value"not-on:@operand1o:Sass::Script::Variable	;iU:@underscored_name"filter;	@:
-@name"filter;	@:@operator:nequ:Sass::Tree::IfNodeê[00[u:Sass::Tree::IfNode‰[o:Sass::Script::Operation
-:
-@linein:@operand2o:Sass::Script::String	;in:@options{ :
-@type:identifier:@value"retina-display:@operand1o:Sass::Script::Variable	;in:@underscored_name"device;	@:
-@name"device;	@:@operator:eq0[o:Sass::Tree::MediaNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;io:@has_childrenT;	@:
-@tabsi :@children[o:Sass::Tree::ContentNode	;@;ip;	@;[ :@query[ "	only" "screen"
- and "(o;	;io;	@;
-;;"#-webkit-max-device-pixel-ratio": o:Sass::Script::Number:@original"1.1;io;	@:@denominator_units[ ;f1.1000000000000001 ôö:@numerator_units[ ")", "(o;	;io;	@;
-;;" max--moz-device-pixel-ratio": o;;"1.1;io;	@;@;f1.1000000000000001 ôö;[ ")@""(o;	;io;	@;
-;;"-o-max-device-pixel-ratio": o;;"1.1;io;	@;@;f1.1000000000000001 ôö;[ ")@""(o;	;io;	@;
-;;"max-device-pixel-ratio": o;;"1.1;io;	@;@;f1.1000000000000001 ôö;[ ");" u; G[o:Sass::Script::Operation
-:
-@lineir:@operand2o:Sass::Script::String	;ir:@options{ :
-@type:identifier:@value"iphone:@operand1o:Sass::Script::Variable	;ir:@underscored_name"device;	@:
-@name"device;	@:@operator:eq0[o:Sass::Tree::MediaNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;is:@has_childrenT;	@:
-@tabsi :@children[o:Sass::Tree::ContentNode	;@;it;	@;[ :@query["	only" "screen"
- and "(o;	;is;	@;
-;;"max-width": o; 
-;is;o:Sass::Script::Number:@original"1;is;	@:@denominator_units[ ;i:@numerator_units[ ;o;	;is;"iphone_portrait;	@;"iphone-portrait;	@;:
-minus")", "(o;	;is;	@;
-;;"min-width": o; 
-;is;o;;"1;is;	@;@;i;[ ;o;	;is;"iphone_landscape;	@;"iphone-landscape;	@;:	plus");" u; S[o:Sass::Script::Operation
-:
-@lineiv:@operand2o:Sass::Script::String	;iv:@options{ :
-@type:identifier:@value"iphone-landscape:@operand1o:Sass::Script::Variable	;iv:@underscored_name"device;	@:
-@name"device;	@:@operator:eq0[o:Sass::Tree::MediaNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;iw:@has_childrenT;	@:
-@tabsi :@children[o:Sass::Tree::ContentNode	;@;ix;	@;[ :@query["	only" "screen"
- and "(o;	;iw;	@;
-;;"max-width": o; 
-;iw;o:Sass::Script::Number:@original"1;iw;	@:@denominator_units[ ;i:@numerator_units[ ;o;	;iw;"iphone_landscape;	@;"iphone-landscape;	@;:
-minus")", "(o;	;iw;	@;
-;;"min-width": o; 
-;iw;o;;"1;iw;	@;@;i;[ ;o;	;iw;"iphone_landscape;	@;"iphone-landscape;	@;:	plus");" u; N[o:Sass::Script::Operation
-:
-@lineiz:@operand2o:Sass::Script::String	;iz:@options{ :
-@type:identifier:@value"iphone-portrait:@operand1o:Sass::Script::Variable	;iz:@underscored_name"device;	@:
-@name"device;	@:@operator:eq0[o:Sass::Tree::MediaNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;i{:@has_childrenT;	@:
-@tabsi :@children[o:Sass::Tree::ContentNode	;@;i|;	@;[ :@query["	only" "screen"
- and "(o;	;i{;	@;
-;;"max-width": o; 
-;i{;o:Sass::Script::Number:@original"1;i{;	@:@denominator_units[ ;i:@numerator_units[ ;o;	;i{;"iphone_portrait;	@;"iphone-portrait;	@;:
-minus")", "(o;	;i{;	@;
-;;"min-width": o; 
-;i{;o;;"1;i{;	@;@;i;[ ;o;	;i{;"iphone_portrait;	@;"iphone-portrait;	@;:	plus");" u; =[o:Sass::Script::Operation
-:
-@linei~:@operand2o:Sass::Script::String	;i~:@options{ :
-@type:identifier:@value"	ipad:@operand1o:Sass::Script::Variable	;i~:@underscored_name"device;	@:
-@name"device;	@:@operator:eq0[o:Sass::Tree::MediaNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;i:@has_childrenT;	@:
-@tabsi :@children[o:Sass::Tree::ContentNode	;@;iÄ;	@;[ :@query["	only" "screen"
- and "(o;	;i;	@;
-;;"max-width": o; 
-;i;o:Sass::Script::Number:@original"1;i;	@:@denominator_units[ ;i:@numerator_units[ ;o;	;i;"ipad_portrait;	@;"ipad-portrait;	@;:
-minus")", "(o;	;i;	@;
-;;"min-width": o; 
-;i;o;;"1;i;	@;@;i;[ ;o;	;i;"ipad_landscape;	@;"ipad-landscape;	@;:	plus");" u; I[o:Sass::Script::Operation
-:
-@lineiÇ:@operand2o:Sass::Script::String	;iÇ:@options{ :
-@type:identifier:@value"ipad-landscape:@operand1o:Sass::Script::Variable	;iÇ:@underscored_name"device;	@:
-@name"device;	@:@operator:eq0[o:Sass::Tree::MediaNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;iÉ:@has_childrenT;	@:
-@tabsi :@children[o:Sass::Tree::ContentNode	;@;iÑ;	@;[ :@query["	only" "screen"
- and "(o;	;iÉ;	@;
-;;"max-width": o; 
-;iÉ;o:Sass::Script::Number:@original"1;iÉ;	@:@denominator_units[ ;i:@numerator_units[ ;o;	;iÉ;"ipad_landscape;	@;"ipad-landscape;	@;:
-minus")", "(o;	;iÉ;	@;
-;;"min-width": o; 
-;iÉ;o;;"1;iÉ;	@;@;i;[ ;o;	;iÉ;"ipad_landscape;	@;"ipad-landscape;	@;:	plus");" u; D[o:Sass::Script::Operation
-:
-@lineiÜ:@operand2o:Sass::Script::String	;iÜ:@options{ :
-@type:identifier:@value"ipad-portrait:@operand1o:Sass::Script::Variable	;iÜ:@underscored_name"device;	@:
-@name"device;	@:@operator:eq0[o:Sass::Tree::MediaNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;iá:@has_childrenT;	@:
-@tabsi :@children[o:Sass::Tree::ContentNode	;@;ià;	@;[ :@query["	only" "screen"
- and "(o;	;iá;	@;
-;;"max-width": o; 
-;iá;o:Sass::Script::Number:@original"1;iá;	@:@denominator_units[ ;i:@numerator_units[ ;o;	;iá;"ipad_portrait;	@;"ipad-portrait;	@;:
-minus")", "(o;	;iá;	@;
-;;"min-width": o; 
-;iá;o;;"1;iá;	@;@;i;[ ;o;	;iá;"ipad_portrait;	@;"ipad-portrait;	@;:	plus");" u; ¸[o:Sass::Script::Operation
-:
-@lineiä:@operand2o:Sass::Script::String	;iä:@options{ :
-@type:identifier:@value"desktop:@operand1o:Sass::Script::Variable	;iä:@underscored_name"device;	@:
-@name"device;	@:@operator:eq0[o:Sass::Tree::MediaNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;iã:@has_childrenT;	@:
-@tabsi :@children[o:Sass::Tree::ContentNode	;@;iå;	@;[ :@query["	only" "screen"
- and "(o;	;iã;	@;
-;;"max-width": o; 
-;iã;o:Sass::Script::Number:@original"1;iã;	@:@denominator_units[ ;i:@numerator_units[ ;o;	;iã;"desktop;	@;"desktop;	@;:
-minus")"
- and "(o;	;iã;	@;
-;;"min-width": o;	;iã;"desktop_large;	@;"desktop-large");" u; Æ[o:Sass::Script::Operation
-:
-@lineié:@operand2o:Sass::Script::String	;ié:@options{ :
-@type:identifier:@value"desktop-large:@operand1o:Sass::Script::Variable	;ié:@underscored_name"device;	@:
-@name"device;	@:@operator:eq0[o:Sass::Tree::MediaNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;iè:@has_childrenT;	@:
-@tabsi :@children[o:Sass::Tree::ContentNode	;@;iê;	@;[ :@query["	only" "screen"
- and "(o;	;iè;	@;
-;;"max-width": o; 
-;iè;o:Sass::Script::Number:@original"1;iè;	@:@denominator_units[ ;i:@numerator_units[ ;o;	;iè;"desktop_large;	@;"desktop-large;	@;:
-minus");" [u;‹[o:Sass::Script::Operation
-:
-@lineiV:@operand2o:Sass::Script::String	;iV:@options{ :
-@type:identifier:@value"iphone-landscape:@operand1o:Sass::Script::Variable	;iV:@underscored_name"device;	@:
-@name"device;	@:@operator:eq0[o:Sass::Tree::MediaNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;iW:@has_childrenT;	@:
-@tabsi :@children[o:Sass::Tree::ContentNode	;@;iX;	@;[ :@query["	only" "screen"
- and "(o: Sass::Script::Interpolation:@aftero;	;iW;	@;
-;;"-width;iW:@originally_textF:	@mido;	;iW;"extrema;	@;"extrema:@whitespace_after0;	@:@before0:@whitespace_before0": o;	;iW;"iphone_landscape;	@;"iphone-landscape");" u;Ÿ[o:Sass::Script::Operation
-:
-@lineiZ:@operand2o:Sass::Script::String	;iZ:@options{ :
-@type:identifier:@value"iphone-portrait:@operand1o:Sass::Script::Variable	;iZ:@underscored_name"device;	@:
-@name"device;	@:@operator:eq0[o:Sass::Tree::MediaNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;i[:@has_childrenT;	@:
-@tabsi :@children[o:Sass::Tree::ContentNode	;@;i\;	@;[ :@query["	only" "screen"
- and "(o: Sass::Script::Interpolation:@aftero;	;i[;	@;
-;;"-width;i[:@originally_textF:	@mido;	;i[;"extrema;	@;"extrema:@whitespace_after0;	@:@before0:@whitespace_before0": o;	;i[;"iphone_portrait;	@;"iphone-portrait");" u;÷[o:Sass::Script::Operation
-:
-@linei^:@operand2o:Sass::Script::String	;i^:@options{ :
-@type:identifier:@value"ipad-landscape:@operand1o:Sass::Script::Variable	;i^:@underscored_name"device;	@:
-@name"device;	@:@operator:eq0[o:Sass::Tree::MediaNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;i_:@has_childrenT;	@:
-@tabsi :@children[o:Sass::Tree::ContentNode	;@;i`;	@;[ :@query["	only" "screen"
- and "(o: Sass::Script::Interpolation:@aftero;	;i_;	@;
-;;"-width;i_:@originally_textF:	@mido;	;i_;"extrema;	@;"extrema:@whitespace_after0;	@:@before0:@whitespace_before0": o;	;i_;"ipad_landscape;	@;"ipad-landscape");" u;”[o:Sass::Script::Operation
-:
-@lineib:@operand2o:Sass::Script::String	;ib:@options{ :
-@type:identifier:@value"ipad-portrait:@operand1o:Sass::Script::Variable	;ib:@underscored_name"device;	@:
-@name"device;	@:@operator:eq0[o:Sass::Tree::MediaNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;ic:@has_childrenT;	@:
-@tabsi :@children[o:Sass::Tree::ContentNode	;@;id;	@;[ :@query["	only" "screen"
- and "(o: Sass::Script::Interpolation:@aftero;	;ic;	@;
-;;"-width;ic:@originally_textF:	@mido;	;ic;"extrema;	@;"extrema:@whitespace_after0;	@:@before0:@whitespace_before0": o;	;ic;"ipad_portrait;	@;"ipad-portrait");" u;¡[o:Sass::Script::Operation
-:
-@lineif:@operand2o:Sass::Script::String	;if:@options{ :
-@type:identifier:@value"desktop:@operand1o:Sass::Script::Variable	;if:@underscored_name"device;	@:
-@name"device;	@:@operator:eq0[o:Sass::Tree::MediaNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;ig:@has_childrenT;	@:
-@tabsi :@children[o:Sass::Tree::ContentNode	;@;ih;	@;[ :@query["	only" "screen"
- and "(o: Sass::Script::Interpolation:@aftero;	;ig;	@;
-;;"-width;ig:@originally_textF:	@mido;	;ig;"extrema;	@;"extrema:@whitespace_after0;	@:@before0:@whitespace_before0": o;	;ig;"desktop;	@;"desktop");" u;”[o:Sass::Script::Operation
-:
-@lineij:@operand2o:Sass::Script::String	;ij:@options{ :
-@type:identifier:@value"desktop-large:@operand1o:Sass::Script::Variable	;ij:@underscored_name"device;	@:
-@name"device;	@:@operator:eq0[o:Sass::Tree::MediaNode:@filename"@/Users/Guga/Sites/sapecapaz/html/sass/_semantic_mixins.sass;ik:@has_childrenT;	@:
-@tabsi :@children[o:Sass::Tree::ContentNode	;@;il;	@;[ :@query["	only" "screen"
- and "(o: Sass::Script::Interpolation:@aftero;	;ik;	@;
-;;"-width;ik:@originally_textF:	@mido;	;ik;"extrema;	@;"extrema:@whitespace_after0;	@:@before0:@whitespace_before0": o;	;ik;"desktop_large;	@;"desktop-large");" ;.0
