@@ -269,8 +269,6 @@ html { font-size: 0.875em; }
 
 body { font-size: 1em; line-height: 1.4; }
 
-hr { display: block; height: 1px; border: 0; border-top: 1px solid #cccccc; margin: 1em 0; padding: 0; }
-
 img { vertical-align: middle; }
 
 fieldset { border: 0; margin: 0; padding: 0; }

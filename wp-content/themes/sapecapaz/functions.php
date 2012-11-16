@@ -292,6 +292,8 @@ function change_post_menu_label() {
     global $menu;
     global $submenu;
     $menu[5][0] = 'Artigos';
+    $menu[5][4] = 'open-if-no-js menu-top';
+    $menu[5][6] = get_bloginfo('template_directory') . '/images/icons/artigo.png';
     $submenu['edit.php'][5][0] = 'Artigos';
     $submenu['edit.php'][10][0] = 'Novo Artigo';
     echo '';

@@ -13,14 +13,6 @@ html
   body
     font-size: 1em
     line-height: 1.4
-
-  hr
-    display: block
-    height: 1px
-    border: 0
-    border-top: 1px solid #ccc
-    margin: 1em 0
-    padding: 0
   
   // Remove the gap between images and the bottom of their containers: h5bp.com/i/440
   img
@@ -96,6 +88,88 @@ html
   line-height: image-height($img)
   padding: $padding
   padding-#{$pos}: image-width($img) + $gap
+
+
+= triangle($position: right, $size: 5px, $color: black)
+  width: 0
+  height: 0
+  line-height: 0
+  @if $position == top
+    border-bottom: $size solid $color
+    border-right: ($size*.75) solid transparent
+    border-left: ($size*.75) solid transparent
+  @if $position == bottom
+    border-top: $size solid $color
+    border-right: ($size*.75) solid transparent
+    border-left: ($size*.75) solid transparent
+  @if $position == left
+    border-right: $size solid $color
+    border-top: ($size*.75) solid transparent
+    border-bottom: ($size*.75) solid transparent
+  @if $position == right
+    border-left: $size solid $color
+    border-top: ($size*.75) solid transparent
+    border-bottom: ($size*.75) solid transparent
+  @if $position == top-left
+    border-top: $size solid $color
+    border-right: $size solid transparent
+  @if $position == top-right
+    border-top: $size solid $color
+    border-left: $size solid transparent
+  @if $position == bottom-right
+    border-bottom: $size solid $color
+    border-left: $size solid transparent
+  @if $position == bottom-left
+    border-bottom: $size solid $color
+    border-right: $size solid transparent
+
+// FILTERS
+= blur($value: 4px)
+  +filter(blur($value))
+
+= brightness($value: 0.35)
+  +filter(brightness($value))
+
+= contrast($value: 140%)
+  +filter(contrast($value))
+
+= grayscale($value: 100%)
+  +filter(grayscale($value))
+
+= saturate($value: 4)
+  +filter(saturate($value))
+
+= invert($value: 100%)
+  +filter(invert($value))
+
+= hue-rotate($value: 180deg)
+  +filter(hue-rotate($value))
+
+= noise($color: gray, $opacity: 1)
+  background-image: url(data:image/png;base64,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)
+  @if $opacity < 1
+    background-color: rgba($color, $opacity)
+  @else
+    background-color: $color
+
+// NUMERIC LI
+= numeric-list($padding-left: 1em, $left: 0)
+  li
+    position: relative
+    padding-left: $padding-left
+    counter-increment: li
+    &:before
+      content: counter(li)
+      position: absolute
+      left: $left
+      @content
+
+= inset-input($radius: 3px)
+  border-radius: $radius
+  border: 1px solid transparent
+  border-top: none
+  border-bottom: 1px solid #DDD
+  +box-shadow(inset 0 1px 2px rgba(black,.39), 0 -1px 1px rgba(white,.6), 0 1px 0 rgba(white,.6))
 
 
 // TEXT MIXIS
