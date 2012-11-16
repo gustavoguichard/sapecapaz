@@ -28,7 +28,7 @@ get_header(); ?>
       <?php setup_postdata($post);?> 
       <h3><a href="<?php the_permalink();?>"><?php the_title();?></a></h3>
       <?php if($name == "Notícias sapecas"):?>
-        <?php $my_query = new WP_Query('showposts=1&post_type=news'); ?>  
+        <?php $my_query = new WP_Query('showposts=1&post_type=news&orderby=menu_order&order=ASC'); ?>  
         <?php if($my_query->have_posts()) : ?><?php while($my_query->have_posts()) : $my_query->the_post(); ?>
           <a href="<?php the_permalink();?>">
           <?php if(has_post_thumbnail()):?> 

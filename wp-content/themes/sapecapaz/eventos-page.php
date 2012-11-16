@@ -21,7 +21,7 @@ get_header(); ?>
   </article>
   <?php endwhile; // end of the loop. ?>
   <?php endif;?> 
-  <?php query_posts(array($query_string, 'post_type'=>'events', 'posts_per_page'=>$posts_per_page, 'offset'=>$offset));?>
+  <?php query_posts(array($query_string, 'post_type'=>'events', 'posts_per_page'=>$posts_per_page, 'offset'=>$offset, 'orderby'=>'menu_order', 'order'=>'ASC'));?>
   <?php get_template_part( 'loop', 'events' ); ?>
   <aside class="pagination">
     <?php if(get_next_posts_link()):?>

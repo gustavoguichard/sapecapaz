@@ -16,7 +16,7 @@ get_header(); ?>
     <?php endwhile; // end of the loop. ?>
     <hr />
   </article>
-  <?php query_posts(array($query_string, 'post_type'=>'services', 'showposts'=>-1));?>
+  <?php query_posts(array($query_string, 'post_type'=>'services', 'showposts'=>-1, 'orderby'=>'menu_order', 'order'=>'ASC'));?>
   <?php get_template_part( 'loop', 'services' ); ?>
 </div>
 <?php query_posts('pagename=servicos');?>

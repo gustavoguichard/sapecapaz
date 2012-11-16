@@ -17,12 +17,12 @@ get_header(); ?>
     <hr />
     <section class="gallery">
       <h3>Álbuns de Fotos</h3>
-      <?php query_posts(array($query_string, 'post_type'=>'album', 'showposts'=>2));?>
+      <?php query_posts(array($query_string, 'post_type'=>'album', 'showposts'=>2, 'orderby'=>'menu_order', 'order'=>'ASC'));?>
       <?php get_template_part( 'loop', 'albums' ); ?>
       <a href="<?php echo get_permalink_by_name("fotos");?>" class="button">Ver mais álbuns</a>
       <hr />
       <h3>Vídeos</h3>
-      <?php query_posts(array($query_string, 'post_type'=>'video', 'showposts'=>2));?>
+      <?php query_posts(array($query_string, 'post_type'=>'video', 'showposts'=>2, 'orderby'=>'menu_order', 'order'=>'ASC'));?>
       <?php get_template_part( 'loop', 'videos' ); ?>
       <a href="<?php echo get_permalink_by_name("videos");?>" class="button">Ver mais vídeos</a>
     </section>

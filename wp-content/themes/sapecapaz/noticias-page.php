@@ -18,7 +18,7 @@ get_header(); ?>
     <?php endwhile; // end of the loop. ?>
   </article>
   <?php endif;?> 
-  <?php query_posts(array($query_string, 'post_type'=>'news', 'paged'=>$paged));?>
+  <?php query_posts(array($query_string, 'post_type'=>'news', 'paged'=>$paged, 'orderby'=>'menu_order', 'order'=>'ASC'));?>
   <?php get_template_part( 'loop', 'index' ); ?>
   <aside class="pagination">
     <?php if(get_next_posts_link()):?>

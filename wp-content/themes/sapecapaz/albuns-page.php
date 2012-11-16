@@ -20,7 +20,7 @@ get_header(); ?>
     <?php endwhile; // end of the loop. ?>
     <hr />
   <?php endif;?>
-  <?php query_posts(array($query_string, 'post_type'=>'album', 'posts_per_page'=>$posts_per_page, 'offset'=>$offset));?>
+  <?php query_posts(array($query_string, 'post_type'=>'album', 'posts_per_page'=>$posts_per_page, 'offset'=>$offset, 'orderby'=>'menu_order', 'order'=>'ASC'));?>
   <?php get_template_part( 'loop', 'albums' ); ?>
   </article>
   <aside class="pagination">

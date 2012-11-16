@@ -1,6 +1,8 @@
 <?php get_header(); ?>
 <div id="main">
   <?php $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;?>
+  <?php $posts_per_page = 3;?> 
+  <?php $offset = $posts_per_page*($paged-1);?> 
   <?php if($paged <= 1):?>
   <article class="hentry">
     <?php $post = get_page_by_title("Artigos sapecas");?>
@@ -10,6 +12,8 @@
     <hr />
   </article>
   <?php endif;?> 
+  <?php query_posts(array($query_string, 'posts_per_page'=>$posts_per_page, 'offset'=>$offset, 'orderby'=>'menu_order', 'order'=>'ASC'));?>
+  
 	<?php get_template_part( 'loop', 'index' ); ?>
   <aside class="pagination">
     <?php if(get_next_posts_link()):?>
