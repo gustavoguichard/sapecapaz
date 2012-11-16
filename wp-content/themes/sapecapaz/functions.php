@@ -409,11 +409,10 @@ function sapeca_add_class_to_menu($classes)
     if (in_array('menu-item-163', $classes)) $classes[] = 'current-menu-item';
     if (in_array('menu-item-157', $classes)) $classes[] = 'current-menu-item';
   }
-  else if (is_singular('video'))
+  else if (is_singular('events'))
   {
     $classes = array_filter($classes, "remove_parent_menu");
-    if (in_array('menu-item-164', $classes)) $classes[] = 'current-menu-item';
-    if (in_array('menu-item-157', $classes)) $classes[] = 'current-menu-item';
+    if (in_array('menu-item-170', $classes)) $classes[] = 'current-menu-item';
   }
   else if (is_page_template('videos-page.php') || is_page_template('albuns-page.php'))
   {
