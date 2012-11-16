@@ -8,6 +8,7 @@
  */
 
 get_header(); ?>
+<?php disable_past_events();?> 
 <section id="banner">
   <article class="banner_content">
     <h1 class="banner_call_out">
@@ -37,7 +38,12 @@ get_header(); ?>
           <?php the_excerpt();?>
         <?php endwhile; endif; wp_reset_query(); ?> 
       <?php elseif($name == "Agenda"):?>
-        Hey
+        <ul class="agenda_list">
+        <?php $my_query = new WP_Query('showposts=6&post_type=appointment&orderby=menu_order&order=ASC');?>
+        <?php if($my_query->have_posts()) : ?><?php while($my_query->have_posts()) : $my_query->the_post(); ?>
+          <li><a href="<?php echo get_post_meta($post->ID, 'agenda_url', true);?>"><?php the_title();?></a></li>
+        <?php endwhile; endif; wp_reset_query(); ?> 
+        </ul>
       <?php else:?>
         <a href="<?php the_permalink();?>">
         <?php if(has_post_thumbnail()):?> 

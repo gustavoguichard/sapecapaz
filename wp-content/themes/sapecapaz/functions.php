@@ -363,7 +363,21 @@ function get_permalink_by_name($page_name)
   global $wpdb;
   $pageid_name = $wpdb->get_var("SELECT ID FROM $wpdb->posts WHERE post_name = '".$page_name."'");
   return get_permalink($pageid_name);
-} 
+}
 
+function disable_past_events()
+{
+  global $wpdb;
+  $server_time = date('mdy');
+  $result = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type = 'appointment' AND post_status = 'publish'");
+  if(!empty($result)) foreach ($result as $post){
+      $expiration = get_post_meta($post->ID, 'agenda_expires', true);
+      $seconds_between = strtotime($expiration)-time();
+      if($seconds_between < 0){
+        $post->post_status = 'draft';
+        wp_update_post($post);
+      }
+  }
+}
 
 ?>

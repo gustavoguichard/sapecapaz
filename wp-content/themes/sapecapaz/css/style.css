@@ -439,7 +439,8 @@ hr:nth-child(odd), .post:nth-child(odd) > hr, .hentry:nth-child(odd) > hr { back
 #main { padding-top: 5.6em; padding-bottom: 18.2em; overflow: hidden; }
 .page-template-contato-page-php #main { padding-bottom: 11.2em; }
 @media only screen and (max-width: 480px) { #main { padding-bottom: 9.8em; } }
-#main ul li { background: url('../images/small_star.png?1352386635') no-repeat 0 5px; padding-left: 16px; margin-bottom: 0.7em; }
+
+.agenda_list li, #main ul li { background: url('../images/small_star.png?1352386635') no-repeat 0 5px; padding-left: 16px; margin-bottom: 0.7em; }
 
 .post, .pagination, .page-title, .hentry, .service_item { width: 83.33333%; margin-left: 8.33333%; margin-bottom: 1.4em; }
 
