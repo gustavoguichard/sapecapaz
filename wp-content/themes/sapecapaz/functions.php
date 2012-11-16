@@ -382,4 +382,52 @@ function disable_past_events()
   }
 }
 
+function remove_parent_menu($var)
+{
+  if ($var == 'current_page_parent' || $var == 'current-menu-item' || $var == 'current-page-ancestor'){
+    return false;
+  }
+  return true;
+}
+
+function sapeca_add_class_to_menu($classes)
+{
+  if (is_singular('post'))
+  {
+    $classes = array_filter($classes, "remove_parent_menu");
+    if (in_array('menu-item-159', $classes)) $classes[] = 'current-menu-item';
+    if (in_array('menu-item-168', $classes)) $classes[] = 'current-menu-item';
+  }
+  else if (is_singular('services'))
+  {
+    $classes = array_filter($classes, "remove_parent_menu");
+    if (in_array('menu-item-171', $classes)) $classes[] = 'current-menu-item';
+  }
+  else if (is_singular('album'))
+  {
+    $classes = array_filter($classes, "remove_parent_menu");
+    if (in_array('menu-item-163', $classes)) $classes[] = 'current-menu-item';
+    if (in_array('menu-item-157', $classes)) $classes[] = 'current-menu-item';
+  }
+  else if (is_singular('video'))
+  {
+    $classes = array_filter($classes, "remove_parent_menu");
+    if (in_array('menu-item-164', $classes)) $classes[] = 'current-menu-item';
+    if (in_array('menu-item-157', $classes)) $classes[] = 'current-menu-item';
+  }
+  else if (is_page_template('videos-page.php') || is_page_template('albuns-page.php'))
+  {
+    if (in_array('menu-item-157', $classes)) $classes[] = 'current-menu-item';
+  }
+  else if (is_singular('news'))
+  {
+    $classes = array_filter($classes, "remove_parent_menu");
+    if (in_array('menu-item-160', $classes)) $classes[] = 'current-menu-item';
+  }
+
+  return $classes;
+}
+
+if (!is_admin()) { add_filter('nav_menu_css_class', 'sapeca_add_class_to_menu'); }
+
 ?>
