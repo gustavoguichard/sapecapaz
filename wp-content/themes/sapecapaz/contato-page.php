@@ -37,7 +37,7 @@ if(isset($_POST['submitted'])) {
   }
 
   if(!isset($hasError)) {
-    $emailTo = "gustavoguichard@gmail.com";
+    $emailTo = "sapecapaz@sapecapaz.com.br";
     $subject = 'Mensagem pelo site: '.$name;
     $body = "Nome: $name \n\nEmail: $email \n\nMensagem: $comments";
     $headers = 'From: '.$name.' <'.$emailTo.'>' . "\r\n" . 'Reply-To: ' . $email;
