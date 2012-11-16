@@ -392,7 +392,7 @@ function remove_parent_menu($var)
 
 function sapeca_add_class_to_menu($classes)
 {
-  if (is_singular('post'))
+  if (is_singular('post') || is_category())
   {
     $classes = array_filter($classes, "remove_parent_menu");
     if (in_array('menu-item-159', $classes)) $classes[] = 'current-menu-item';
