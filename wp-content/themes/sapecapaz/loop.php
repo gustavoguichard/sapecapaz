@@ -1,7 +1,7 @@
 <?php if ( ! have_posts() ) : ?>
 	<article class="post e404">
-		<h2>Nada encontrado</h2>
-		<p>Desculpe, mas nenhum artigo pode ser encontrado. Talvez uma busca possa ajudar...</p>
+		<h2>Opa, ainda não há conteúdo aqui...</h2>
+		<p>Aguarde que em breve estaremos disponibilizando muito conteúdo da Paz por todo o site.</p>
 	</article>
 <?php endif; ?>
 <?php $i = 0;?>	
