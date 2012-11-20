@@ -18,8 +18,8 @@
 <body <?php body_class(); ?>>
   <aside id="search-box">
     <div id="search-container">
-      <form id="searchform" action="<?php bloginfo('url');?>" method="get" class="pull-right">
-        <input id="s" class="field" type="text" placeholder="Buscar" name="s">
+      <form id="searchform" action="<?php bloginfo('url');?>" method="get">
+        <input id="s" type="text" placeholder="Buscar" name="s">
       </form>
     </div>
     <a id="toggle-search" href="#search-container">Buscar</a>
