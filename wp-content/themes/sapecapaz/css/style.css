@@ -497,8 +497,8 @@ input[type=submit]:active, button:active, a.button:active { -webkit-box-shadow: 
 
 .copyright { font-size: 0.78571em; text-align: right; display: block; padding-top: 10px; clear: both; position: relative; bottom: -4px; }
 
-h6.error { color: #ec1c24; }
-h6.success { color: #628d2b; }
+h1.error, h2.error, h3.error, h4.error, h5.error, h6.error { color: #ec1c24; }
+h1.success, h2.success, h3.success, h4.success, h5.success, h6.success { color: #628d2b; }
 
 .error404, .search-no-results { position: relative; }
 .error404:after, .search-no-results:after { content: ""; display: block; position: absolute; text-indent: -119988px; overflow: hidden; text-align: left; display: block; background-repeat: no-repeat; height: 221px; width: 122px; background-image: url('../images/flute.png?1353000186'); bottom: 84px; left: 7px; }

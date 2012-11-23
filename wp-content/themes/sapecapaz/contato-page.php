@@ -52,13 +52,14 @@ get_header(); ?>
   <article class="post">
     <div id="contact-section">
     	<?php if ( have_posts() ) while ( have_posts() ) : the_post(); ?>
+      <?php if(!isset($hasError) && isset($_POST['submitted'])):?>
+      <h2 class="success">Sua mensagem foi enviada com sucesso!</h2>
+      <?php the_content();?>
+      <?php else:?>
       <?php the_content();?>
       <?php if(isset($hasError)):?> 
       <h6 class="error">Você não preencheu corretamente todos os campos. Por favor, revise antes de enviar.</h46>
       <?php endif;?>
-      <?php if(!isset($hasError) && isset($_POST['submitted'])):?>
-      <h6 class="success">Sua mensagem foi enviada com sucesso!</h46>
-      <?php else:?>
       <form action="<?php the_permalink(); ?>" id="contactForm" method="post" <?php if(isset($hasError)){echo "class=\"error\"";};?>>
         <input type="text" name="contactName" id="contactName" value="" placeholder="Nome" required />
         <input type="email" name="email" id="email" value="" placeholder="Email" required />
