@@ -431,8 +431,8 @@ header.header:before { content: ""; display: block; position: absolute; text-ind
 #top_menu .menu-item.active a, #top_menu .menu-item.current-menu-item a { font-weight: bold; }
 
 hr { clear: left; background-position: 0 -138px; text-indent: -119988px; overflow: hidden; text-align: left; display: block; width: 431px; height: 22px; margin: 1.4em auto; border: none; }
-hr:nth-child(even), .post:nth-child(even) > hr, .hentry:nth-child(even) > hr { background-position: 0 -116px; }
-hr:nth-child(odd), .post:nth-child(odd) > hr, .hentry:nth-child(odd) > hr { background-position: 0 -138px; }
+hr:nth-of-type(even), .post:nth-of-type(even) > hr, .hentry:nth-of-type(even) > hr { background-position: 0 -116px; }
+hr:nth-of-type(odd), .post:nth-of-type(odd) > hr, .hentry:nth-of-type(odd) > hr { background-position: 0 -138px; }
 
 #main { padding-top: 5.6em; padding-bottom: 18.2em; overflow: hidden; }
 .page-template-contato-page-php #main { padding-bottom: 11.2em; }
